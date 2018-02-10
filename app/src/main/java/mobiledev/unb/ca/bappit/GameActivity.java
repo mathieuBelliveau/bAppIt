@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class GameActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = "debug";
@@ -23,6 +25,17 @@ public class GameActivity extends AppCompatActivity {
     private Button gameButton;
     private Button finishButton;
     private TextView scoreText;
+    private TextView currentGestureText;
+
+    private final static String[] gestures = new String[] {"TAP", "SWIPE"};
+
+    private final static int SWIPE = 0;
+    private final static int TAP = 1;
+    private final static int NUM_GESTURES = 2;
+
+    private int currentGesture;
+
+    Random rand;
 
     private GestureDetectorCompat mDetector;
 
@@ -34,16 +47,17 @@ public class GameActivity extends AppCompatActivity {
         hideSystemUI();
 
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        rand = new Random();
 
         score = 0;
 
-        gameButton = (Button) (findViewById(R.id.game_btn));
-        gameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                increaseScore();
-            }
-        });
+//        gameButton = (Button) (findViewById(R.id.game_btn));
+//        gameButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                increaseScore();
+//            }
+//        });
 
         finishButton = (Button) (findViewById(R.id.finish_btn));
         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +68,9 @@ public class GameActivity extends AppCompatActivity {
         });
 
         scoreText = (TextView) findViewById(R.id.score_txt);
+        currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
 
+        changeGesture();
     }
 
     private void increaseScore() {
@@ -88,15 +104,41 @@ public class GameActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+
+            if(currentGesture == SWIPE) {
+                increaseScore();
+                changeGesture();
+            }
+            else {
+                gameOver();
+            }
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.d(DEBUG_TAG, "onTap: " + e.toString());
+            if(currentGesture == TAP) {
+                increaseScore();
+                changeGesture();
+            }
+            else {
+                gameOver();
+            }
             return true;
         }
     }
+
+    private void changeGesture() {
+        currentGesture = rand.nextInt(NUM_GESTURES);
+        if(currentGesture == SWIPE) {
+            currentGestureText.setText("Swipe It!");
+        }
+        else if(currentGesture == TAP) {
+            currentGestureText.setText("Tap It!");
+        }
+    }
+
 //this is a test!! I'm testin!
     private void hideSystemUI() {
         // Set the IMMERSIVE flag.
