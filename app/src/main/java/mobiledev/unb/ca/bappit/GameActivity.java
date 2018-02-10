@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -50,14 +52,6 @@ public class GameActivity extends AppCompatActivity {
         rand = new Random();
 
         score = 0;
-
-//        gameButton = (Button) (findViewById(R.id.game_btn));
-//        gameButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                increaseScore();
-//            }
-//        });
 
         finishButton = (Button) (findViewById(R.id.finish_btn));
         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -137,9 +131,18 @@ public class GameActivity extends AppCompatActivity {
         else if(currentGesture == TAP) {
             currentGestureText.setText("Tap It!");
         }
+        RunTextAnimation();
     }
 
-//this is a test!! I'm testin!
+    private void RunTextAnimation()
+    {
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.scale_text);
+        a.reset();
+        TextView tv = (TextView) findViewById(R.id.current_gesture_txt);
+        tv.clearAnimation();
+        tv.startAnimation(a);
+    }
+
     private void hideSystemUI() {
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content

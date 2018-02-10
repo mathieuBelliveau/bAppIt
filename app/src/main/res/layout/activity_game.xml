@@ -6,24 +6,6 @@
     android:layout_height="match_parent"
     tools:context="mobiledev.unb.ca.bappit.GameActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Playing Game"
-        android:textSize="50sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.17"
-        tools:layout_editor_absoluteX="41dp" />
-
     <Button
         android:id="@+id/finish_btn"
         android:layout_width="115dp"
@@ -39,12 +21,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.919"
+        app:layout_constraintVertical_bias="0.873"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.826" />
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <TextView
         android:id="@+id/score_txt"
@@ -55,29 +37,33 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="Score: 0"
+        android:textAlignment="textEnd"
         android:textColor="@android:color/holo_green_light"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.963"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.351" />
+        app:layout_constraintVertical_bias="0.016" />
 
     <TextView
         android:id="@+id/current_gesture_txt"
-        android:layout_width="209dp"
-        android:layout_height="92dp"
+        android:layout_width="284dp"
+        android:layout_height="177dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="Current Gesture"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.559" />
+        app:layout_constraintVertical_bias="0.431"
+        tools:layout_editor_absoluteY="121dp" />
+
 </android.support.constraint.ConstraintLayout>
