@@ -97,7 +97,7 @@ public class GameActivity extends AppCompatActivity {
             return true;
         }
     }
-
+//this is a test!! I'm testin!
     private void hideSystemUI() {
         // Set the IMMERSIVE flag.
         // Set the content to appear under the system bars so that the content
