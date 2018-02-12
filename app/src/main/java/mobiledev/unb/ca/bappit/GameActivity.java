@@ -24,8 +24,7 @@ public class GameActivity extends AppCompatActivity {
     private View gameView;
     private int score;
 
-    private Button gameButton;
-    private Button finishButton;
+    private Button quitButton;
     private TextView scoreText;
     private TextView currentGestureText;
 
@@ -53,8 +52,8 @@ public class GameActivity extends AppCompatActivity {
 
         score = 0;
 
-        finishButton = (Button) (findViewById(R.id.finish_btn));
-        finishButton.setOnClickListener(new View.OnClickListener() {
+        quitButton = (Button) (findViewById(R.id.quit_btn));
+        quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 gameOver();
