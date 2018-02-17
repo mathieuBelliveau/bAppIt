@@ -3,6 +3,7 @@ package mobiledev.unb.ca.bappit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Random;
@@ -34,7 +36,11 @@ public class GameActivity extends AppCompatActivity {
     private final static int TAP = 1;
     private final static int NUM_GESTURES = 2;
 
+    private int timeForGesture;
     private int currentGesture;
+    private boolean gestureComplete;
+    private CountDownTimer gestureTimer;
+    private ProgressBar timerProgressBar;
 
     Random rand;
 
@@ -62,6 +68,13 @@ public class GameActivity extends AppCompatActivity {
 
         scoreText = (TextView) findViewById(R.id.score_txt);
         currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
+        timerProgressBar = (ProgressBar) findViewById(R.id.timeProgressBar);
+
+        timeForGesture = 3000;
+        timerProgressBar.setMax(timeForGesture);
+
+
+
 
         changeGesture();
     }
@@ -97,40 +110,63 @@ public class GameActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-
-            if(currentGesture == SWIPE) {
-                increaseScore();
-                changeGesture();
-            }
-            else {
-                gameOver();
-            }
+            checkGesture(SWIPE);
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             Log.d(DEBUG_TAG, "onTap: " + e.toString());
-            if(currentGesture == TAP) {
+            checkGesture(TAP);
+            return true;
+        }
+
+        private void checkGesture(int gesture) {
+            if(currentGesture == gesture && !gestureComplete) {
                 increaseScore();
-                changeGesture();
+                gestureComplete = true;
+
+                timerProgressBar.setVisibility(View.INVISIBLE);
+//                gestureTimer.cancel();
+//                changeGesture();
             }
             else {
+                gestureTimer.cancel();
                 gameOver();
             }
-            return true;
         }
     }
 
     private void changeGesture() {
         currentGesture = rand.nextInt(NUM_GESTURES);
+
         if(currentGesture == SWIPE) {
             currentGestureText.setText("Swipe It!");
         }
         else if(currentGesture == TAP) {
             currentGestureText.setText("Tap It!");
         }
+        gestureComplete = false;
         RunTextAnimation();
+        timerProgressBar.setVisibility(View.VISIBLE);
+
+        gestureTimer = new CountDownTimer(timeForGesture, 100) {
+
+            public void onTick(long millisUntilFinished) {
+                if(!gestureComplete) {
+                    timerProgressBar.setProgress((int)millisUntilFinished);
+                }
+            }
+
+            public void onFinish() {
+                if(gestureComplete) {
+                    changeGesture();
+                }
+                else{
+                    gameOver();
+                }
+            }
+        }.start();
     }
 
     private void RunTextAnimation()
