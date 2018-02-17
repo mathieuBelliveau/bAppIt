@@ -1,5 +1,6 @@
 package mobiledev.unb.ca.bappit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -8,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HighScoresActivity extends AppCompatActivity {
    // private ArrayList<HighScoreCard> mHScoreCards;
@@ -21,44 +22,48 @@ public class HighScoresActivity extends AppCompatActivity {
         ArrayList<HighScoreCard> mHScoreCards = getHiScores();
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.hi_score_list);
-        mRecyclerView.setAdapter(new HiScoreRecyclerAdapter(mHScoreCards));
+        mRecyclerView.setAdapter(new HiScoreRecyclerViewAdapter(mHScoreCards));
 
         //grab from JSON file storing our high scores.
 
     }
 
-    protected ArrayList<HighScoreCard> getHiScores()
+    private ArrayList<HighScoreCard> getHiScores()
     {
         HighScoreCard h1 = new HighScoreCard("Suzannah", 32);
         HighScoreCard h2 = new HighScoreCard("Mathieu", 29);
+        HighScoreCard h3 = new HighScoreCard("Gabe", 30);
 
-        ArrayList<HighScoreCard> hcd = new ArrayList<HighScoreCard>();
+        ArrayList<HighScoreCard> hcd = new ArrayList<HighScoreCard>();//first position is rank 1
         hcd.add(h1);
         hcd.add(h2);
+        hcd.add(h3);
+
+        Collections.sort(hcd);//sorts
 
         return hcd;
     }
 
 
-    public class HiScoreRecyclerAdapter extends RecyclerView.Adapter<HiScoreRecyclerAdapter.ViewHolder>
+    public class HiScoreRecyclerViewAdapter
+            extends RecyclerView.Adapter<HiScoreRecyclerViewAdapter.ViewHolder>
     {
-        private final ArrayList<HighScoreCard> mHSCards;
+        private final ArrayList<HighScoreCard> hScoreCardList;
 
-        public HiScoreRecyclerAdapter(ArrayList<HighScoreCard> hsc)
+        public HiScoreRecyclerViewAdapter(ArrayList<HighScoreCard> hsc)
         {
-            mHSCards = hsc;
+            hScoreCardList = hsc;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.hi_score_card, parent, false);
+                    .inflate(R.layout.hs_card, parent, false);
             return new ViewHolder(view);
         }
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder
-        {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView name;
             public final TextView score;
@@ -68,69 +73,28 @@ public class HighScoresActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                name = (TextView) view.findViewById(R.id.Name);
+                name = (TextView) view.findViewById(R.id.name);
                 score = (TextView) view.findViewById(R.id.score);
-                rank = (TextView) view.findViewById(R.id.Rank);
+                rank = (TextView) view.findViewById(R.id.rank);
             }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-
-
-
-            @Override
-            public void onBindViewHolder(final ViewHolder holder, int position) {
-                holder.mHighScoreCard = mHSCards.get(position);
-                holder.name.setText(mHSCards.get(position).getName());
-                holder.score.setText(mHSCards.get(position).getScore());
-                holder.rank.setText(mHSCards.get(position));
-
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        /**
-                         * Setting the data to be sent to the Detail portion of the template.
-                         * Here, we send the title, longitude, and latitude of the Earthquake
-                         * that was clicked in the RecyclerView. The Detail Activity/Fragment
-                         * will then display this information. Condition check is whether we
-                         * are twoPane on a Tablet, which varies how we pass arguments to the
-                         * participating activity/fragment.
-                         */
-                        String title = holder.mGeoData.title;
-                        String lng = holder.mGeoData.longitude;
-                        String lat = holder.mGeoData.latitude;
-                        if (mTwoPane) {
-                            Bundle arguments = new Bundle();
-                            arguments.putString(GeoDataDetailFragment.TITLE, title);
-                            arguments.putString(GeoDataDetailFragment.LNG, lng);
-                            arguments.putString(GeoDataDetailFragment.LAT, lat);
-                            GeoDataDetailFragment fragment = new GeoDataDetailFragment();
-                            fragment.setArguments(arguments);
-                            getSupportFragmentManager().beginTransaction()
-                                    .replace(R.id.geodata_detail_container, fragment)
-                                    .commit();
-                        } else {
-                            Intent intent = new Intent(GeoDataListActivity.this, GeoDataDetailActivity.class);
-                            Bundle args = new Bundle();
-                            args.putString(GeoDataDetailFragment.TITLE, title);
-                            args.putString(GeoDataDetailFragment.LNG, lng);
-                            args.putString(GeoDataDetailFragment.LAT, lat);
-                            intent.putExtras(args);
-                            startActivity(intent);
-                            // TODO Create an Intent to start GeoDataDetailActivity. You'll need
-                            // to add some extras to this intent. Look at that class, and the
-                            // example Fragment transaction for the two pane case above, to
-                            // figure out what you need to add.
-
-                        }
-                    }
-                });
-            }
-
 
         }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, int position) {
+            holder.mHighScoreCard = hScoreCardList.get(position);
+            holder.name.setText(hScoreCardList.get(position).getName());
+            holder.score.setText(hScoreCardList.get(position).getScore());
+            holder.rank.setText(position);//position in a sorted list
+        }
+
+        @Override
+        public int getItemCount() {
+            return hScoreCardList.size();
+        }
+
+
+
 
     }
 

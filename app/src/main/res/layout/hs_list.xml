@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     app:layoutManager="LinearLayoutManager"
-    tools:listitem="@layout/hi_score_card"
+    tools:listitem="@layout/hs_card"
     tools:context=".HighScoresActivity"
 
     />
