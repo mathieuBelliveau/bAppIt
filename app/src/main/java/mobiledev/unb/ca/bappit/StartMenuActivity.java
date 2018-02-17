@@ -9,6 +9,7 @@ import android.widget.Button;
 public class StartMenuActivity extends AppCompatActivity {
 
     Button startButton;
+    Button settingsButton;
     View mainView;
 
     @Override
@@ -25,6 +26,16 @@ public class StartMenuActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        settingsButton = (Button) findViewById(R.id.settings_btn);
+        settingsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent (StartMenuActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         showSystemUI();
     }
 
