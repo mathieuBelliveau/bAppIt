@@ -1,101 +1,68 @@
 package mobiledev.unb.ca.bappit;
 
-import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.CursorAdapter;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class HighScoresActivity extends AppCompatActivity {
    // private ArrayList<HighScoreCard> mHScoreCards;
+    private ListView mHighScoreListView;
+    private TextView mResultsTextView;
+    private DBHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_high_scores);
-        ArrayList<HighScoreCard> mHScoreCards = getHiScores();
 
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.hi_score_list);
-        mRecyclerView.setAdapter(new HiScoreRecyclerViewAdapter(mHScoreCards));
+        mHighScoreListView = (ListView) findViewById(R.id.hs_listview);
+        mResultsTextView = (TextView) findViewById(R.id.hs_results_text);
+        mDbHelper = new DBHelper(this);
 
-        //grab from JSON file storing our high scores.
-
+        QueryTask task = new QueryTask();
+        task.execute();
     }
 
-    private ArrayList<HighScoreCard> getHiScores()
-    {
-        HighScoreCard h1 = new HighScoreCard("Suzannah", 32);
-        HighScoreCard h2 = new HighScoreCard("Mathieu", 29);
-        HighScoreCard h3 = new HighScoreCard("Gabe", 30);
+    private class QueryTask extends AsyncTask<String, Void, Cursor> {
+        protected Cursor doInBackground(String... params) {
 
-        ArrayList<HighScoreCard> hcd = new ArrayList<HighScoreCard>();//first position is rank 1
-        hcd.add(h1);
-        hcd.add(h2);
-        hcd.add(h3);
+            SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        Collections.sort(hcd);//sorts
-
-        return hcd;
-    }
-
-
-    public class HiScoreRecyclerViewAdapter
-            extends RecyclerView.Adapter<HiScoreRecyclerViewAdapter.ViewHolder>
-    {
-        private final ArrayList<HighScoreCard> hScoreCardList;
-
-        public HiScoreRecyclerViewAdapter(ArrayList<HighScoreCard> hsc)
-        {
-            hScoreCardList = hsc;
+            return db.rawQuery(
+                    "SELECT * FROM " + DBHelper.TABLE_NAME + ";",
+                    null
+            );
         }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.hs_card, parent, false);
-            return new ViewHolder(view);
-        }
+        protected void onPostExecute(Cursor result) {
+            String[] projection = {
+                    DBHelper.NAME,
+                    DBHelper.SCORE
+            };
 
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView name;
-            public final TextView score;
-            public final TextView rank;
-            public HighScoreCard mHighScoreCard;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                name = (TextView) view.findViewById(R.id.name);
-                score = (TextView) view.findViewById(R.id.score);
-                rank = (TextView) view.findViewById(R.id.rank);
+            if(result.getCount() > 0) {
+                SimpleCursorAdapter adapter = new SimpleCursorAdapter (
+                        HighScoresActivity.this,
+                        R.layout.hs_list,
+                        result,
+                        projection,
+                        new int[] {R.id.name_textview, R.id.score_textview},
+                        CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+                );
+                mHighScoreListView.setAdapter(adapter);
             }
-
+            else {
+                mResultsTextView.setText("No results found");
+            }
         }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mHighScoreCard = hScoreCardList.get(position);
-            holder.name.setText(hScoreCardList.get(position).getName());
-            holder.score.setText(hScoreCardList.get(position).getScore());
-            holder.rank.setText(position);//position in a sorted list
-        }
-
-        @Override
-        public int getItemCount() {
-            return hScoreCardList.size();
-        }
-
-
-
-
     }
 
 

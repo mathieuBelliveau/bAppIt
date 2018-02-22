@@ -11,6 +11,8 @@ public class StartMenuActivity extends AppCompatActivity {
     Button startButton;
     View mainView;
 
+    private Button highScoresButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,15 @@ public class StartMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(StartMenuActivity.this, GameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        highScoresButton = (Button) findViewById(R.id.highscore_btn);
+        highScoresButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StartMenuActivity.this, HighScoresActivity.class);
                 startActivity(intent);
             }
         });
