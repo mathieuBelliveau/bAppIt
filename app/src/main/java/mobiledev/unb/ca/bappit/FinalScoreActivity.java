@@ -2,6 +2,7 @@ package mobiledev.unb.ca.bappit;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -23,7 +25,12 @@ public class FinalScoreActivity extends AppCompatActivity {
     private Button replayBtn;
     private Button mainMenuBtn;
     private Button saveScoreBtn;
+    private Button highScoreBtn;
     private EditText nameEditText;
+    private TextView highScoreText;
+    private TextView enterNameText;
+
+    private int finalScore;
 
     private DBHelper dbHelper;
 
@@ -34,12 +41,14 @@ public class FinalScoreActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
 
-        final int finalScore = getIntent().getIntExtra(FINAL_SCORE, 0);
+        finalScore = getIntent().getIntExtra(FINAL_SCORE, 0);
 
         displayScoreText = (TextView) findViewById(R.id.score_display_txt);
         displayScoreText.setText(String.valueOf(finalScore));
 
+        highScoreText = (TextView) findViewById(R.id.highScoreText);
         nameEditText = (EditText) findViewById(R.id.name_edit_text);
+        enterNameText = (TextView) findViewById(R.id.enterNameText);
 
         replayBtn = (Button) findViewById(R.id.replay_btn);
         replayBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +77,21 @@ public class FinalScoreActivity extends AppCompatActivity {
             }
         });
 
+        highScoreBtn = (Button) findViewById(R.id.hiScoreButton);
+        highScoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FinalScoreActivity.this, HighScoresActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+//                finish();
+            }
+        });
+
+        setButtonVisibility(false);
+
+        QueryTopTenTask task = new QueryTopTenTask();
+        task.execute();
 
     }
 
@@ -86,7 +110,8 @@ public class FinalScoreActivity extends AppCompatActivity {
             task.execute(name, String.valueOf(finalScore));
         }
         else {
-            task.execute("-----", String.valueOf(finalScore));
+            Toast toast = Toast.makeText(FinalScoreActivity.this, "Please Enter Name", Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
@@ -108,7 +133,64 @@ public class FinalScoreActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Void result) {
+            setButtonVisibility(false);
+        }
+    }
 
+    private class QueryTopTenTask extends AsyncTask<String, Void, Cursor> {
+        protected Cursor doInBackground(String... params) {
+
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            return db.query(
+                    DBHelper.TABLE_NAME,
+                    DBHelper.COLUMNS,
+                    null,
+                    null,
+                    null,
+                    null,
+                    DBHelper.SCORE + " DESC",
+                    "10"
+            );
+        }
+
+        protected void onPostExecute(Cursor result) {
+            boolean isInTopTen = false;
+            if (result.getCount() == 10) {
+                result.moveToLast();
+                int score = result.getInt(result.getColumnIndexOrThrow(DBHelper.SCORE));
+                isInTopTen = finalScore > score;
+            }
+
+            if (result.getCount() < 10 || isInTopTen) {
+                highScoreText.setText("New Top\nTen Score!");
+                setButtonVisibility(true);
+            }
+            else {
+                result.moveToFirst();
+                int bestScore = result.getInt(result.getColumnIndexOrThrow(DBHelper.SCORE));
+                highScoreText.setText("Best\n" + bestScore);
+            }
+        }
+    }
+
+    private void setButtonVisibility(boolean isHighScore) {
+        if(isHighScore) {
+            replayBtn.setVisibility(View.GONE);
+            highScoreBtn.setVisibility(View.GONE);
+            mainMenuBtn.setVisibility(View.GONE);
+
+            saveScoreBtn.setVisibility(View.VISIBLE);
+            nameEditText.setVisibility(View.VISIBLE);
+            enterNameText.setVisibility(View.VISIBLE);
+        }
+        else {
+            nameEditText.setVisibility(View.GONE);
+            saveScoreBtn.setVisibility(View.GONE);
+            enterNameText.setVisibility(View.GONE);
+
+            replayBtn.setVisibility(View.VISIBLE);
+            highScoreBtn.setVisibility(View.VISIBLE);
+            mainMenuBtn.setVisibility(View.VISIBLE);
         }
     }
 }
