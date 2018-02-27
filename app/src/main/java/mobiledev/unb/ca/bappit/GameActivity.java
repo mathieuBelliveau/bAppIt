@@ -1,7 +1,10 @@
 package mobiledev.unb.ca.bappit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.view.GestureDetectorCompat;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -29,18 +33,24 @@ public class GameActivity extends AppCompatActivity {
     private Button quitButton;
     private TextView scoreText;
     private TextView currentGestureText;
+    private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"TAP", "SWIPE"};
+    private final static String[] gestures = new String[] {"Swipe It!", "Tap It!", "Shake It!"};
 
     private final static int SWIPE = 0;
     private final static int TAP = 1;
-    private final static int NUM_GESTURES = 2;
+    private final static int SHAKE = 2;
+    private final static int NUM_GESTURES = 3;
 
     private int timeForGesture;
     private int currentGesture;
     private boolean gestureComplete;
     private CountDownTimer gestureTimer;
     private ProgressBar timerProgressBar;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
 
     Random rand;
 
@@ -67,15 +77,27 @@ public class GameActivity extends AppCompatActivity {
             }
         });
 
+        // ShakeDetector initialization
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+            @Override
+            public void onShake(int count) {
+                Log.d(DEBUG_TAG, "onShake: " + count);
+                checkGesture(SHAKE);
+            }
+        });
+
         scoreText = (TextView) findViewById(R.id.score_txt);
         currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
         timerProgressBar = (ProgressBar) findViewById(R.id.timeProgressBar);
+        checkMarkImage = (ImageView) findViewById(R.id.check_mark_img);
+
 
         timeForGesture = 3000;
         timerProgressBar.setMax(timeForGesture);
-
-
-
 
         changeGesture();
     }
@@ -122,34 +144,40 @@ public class GameActivity extends AppCompatActivity {
             return true;
         }
 
-        private void checkGesture(int gesture) {
-            if(currentGesture == gesture && !gestureComplete) {
-                increaseScore();
-                gestureComplete = true;
+    }
 
-                timerProgressBar.setVisibility(View.INVISIBLE);
-//                gestureTimer.cancel();
-//                changeGesture();
-            }
-            else {
-                gestureTimer.cancel();
-                gameOver();
-            }
+    private void checkGesture(int gesture) {
+        if(currentGesture == gesture && !gestureComplete) {
+            increaseScore();
+            gestureComplete = true;
+
+            timerProgressBar.setVisibility(View.INVISIBLE);
+            currentGestureText.setVisibility(View.GONE);
+            checkMarkImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            gestureTimer.cancel();
+            gameOver();
         }
     }
 
     private void changeGesture() {
         currentGesture = rand.nextInt(NUM_GESTURES);
 
-        if(currentGesture == SWIPE) {
-            currentGestureText.setText("Swipe It!");
-        }
-        else if(currentGesture == TAP) {
-            currentGestureText.setText("Tap It!");
-        }
+//        if(currentGesture == SWIPE) {
+//            currentGestureText.setText("Swipe It!");
+//        }
+//        else if(currentGesture == TAP) {
+//            currentGestureText.setText("Tap It!");
+//        }
+
+        currentGestureText.setText(gestures[currentGesture]);
+
         gestureComplete = false;
         RunTextAnimation();
         timerProgressBar.setVisibility(View.VISIBLE);
+        currentGestureText.setVisibility(View.VISIBLE);
+        checkMarkImage.setVisibility(View.GONE);
 
         gestureTimer = new CountDownTimer(timeForGesture, 100) {
 
@@ -190,5 +218,19 @@ public class GameActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
     }
 }

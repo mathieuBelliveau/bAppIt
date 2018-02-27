@@ -30,6 +30,9 @@ public class HighScoresActivity extends AppCompatActivity {
         mResultsTextView = (TextView) findViewById(R.id.hs_results_text);
         mDbHelper = new DBHelper(this);
 
+//        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+//        db.execSQL("delete from "+ DBHelper.TABLE_NAME);
+
         QueryTask task = new QueryTask();
         task.execute();
     }
@@ -45,7 +48,8 @@ public class HighScoresActivity extends AppCompatActivity {
                     null,
                     null,
                     null,
-                    DBHelper.SCORE + " DESC"
+                    DBHelper.SCORE + " DESC",
+                    "10"
             );
         }
 
@@ -64,7 +68,7 @@ public class HighScoresActivity extends AppCompatActivity {
                 mResultsTextView.setVisibility(View.GONE);
             }
             else {
-                mResultsTextView.setText("No results found");
+                mResultsTextView.setText("No high scores yet");
                 mResultsTextView.setVisibility(View.VISIBLE);
             }
         }
