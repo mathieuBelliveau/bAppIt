@@ -1,6 +1,5 @@
 package mobiledev.unb.ca.bappit;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -8,7 +7,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -163,13 +161,6 @@ public class GameActivity extends AppCompatActivity {
 
     private void changeGesture() {
         currentGesture = rand.nextInt(NUM_GESTURES);
-
-//        if(currentGesture == SWIPE) {
-//            currentGestureText.setText("Swipe It!");
-//        }
-//        else if(currentGesture == TAP) {
-//            currentGestureText.setText("Tap It!");
-//        }
 
         currentGestureText.setText(gestures[currentGesture]);
 
