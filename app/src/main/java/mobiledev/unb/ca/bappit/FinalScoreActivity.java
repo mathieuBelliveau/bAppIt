@@ -1,6 +1,7 @@
 package mobiledev.unb.ca.bappit;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -82,9 +84,7 @@ public class FinalScoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FinalScoreActivity.this, HighScoresActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-//                finish();
             }
         });
 
@@ -97,7 +97,7 @@ public class FinalScoreActivity extends AppCompatActivity {
 
     private void replayGame() {
         Intent intent = new Intent(FinalScoreActivity.this, GameActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
@@ -108,6 +108,12 @@ public class FinalScoreActivity extends AppCompatActivity {
 
         if (name.length() != 0) {
             task.execute(name, String.valueOf(finalScore));
+
+            View view = FinalScoreActivity.this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+            }
         }
         else {
             Toast toast = Toast.makeText(FinalScoreActivity.this, "Please Enter Name", Toast.LENGTH_SHORT);

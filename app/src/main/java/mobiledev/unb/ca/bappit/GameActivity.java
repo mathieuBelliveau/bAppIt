@@ -170,8 +170,10 @@ public class GameActivity extends AppCompatActivity {
         currentGestureText.setVisibility(View.VISIBLE);
         checkMarkImage.setVisibility(View.GONE);
 
-        gestureTimer = new CountDownTimer(timeForGesture, 100) {
-
+        timeForGesture -= timeForGesture*0.03; //decrease logarithmically
+        timerProgressBar.setMax(timeForGesture);
+        
+        gestureTimer = new CountDownTimer(timeForGesture, 50) {
             public void onTick(long millisUntilFinished) {
                 if(!gestureComplete) {
                     timerProgressBar.setProgress((int)millisUntilFinished);

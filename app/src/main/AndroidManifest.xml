@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mobiledev.unb.ca.bappit">
 
+    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,19 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartMenuActivity">
+        <activity
+            android:name=".StartMenuActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameActivity" />
-        <activity android:name=".FinalScoreActivity" />
-        <activity android:name=".SettingsActivity"></activity>
-        <activity android:name=".HighScoresActivity"></activity>
+        <activity
+            android:name=".GameActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".FinalScoreActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".HighScoresActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 
 </manifest>
