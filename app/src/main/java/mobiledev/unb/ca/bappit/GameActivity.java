@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.view.GestureDetectorCompat;
@@ -20,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -45,6 +47,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean gestureComplete;
     private CountDownTimer gestureTimer;
     private ProgressBar timerProgressBar;
+    private Sounds sounds;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -100,12 +103,28 @@ public class GameActivity extends AppCompatActivity {
         changeGesture();
     }
 
+    private void initSound()
+    {
+        //Hardware buttons setting to adjust the media sound
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        sounds = new Sounds(audioManager, this);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        sounds.startMusic();
+    }
+
     private void increaseScore() {
         score++;
         scoreText.setText("Score: " + score);
     }
 
     private void gameOver() {
+        sounds.stopMusic();
         Intent finishIntent = new Intent(GameActivity.this, FinalScoreActivity.class);
         finishIntent.putExtra(FinalScoreActivity.FINAL_SCORE, score);
         startActivity(finishIntent);
@@ -152,6 +171,8 @@ public class GameActivity extends AppCompatActivity {
             timerProgressBar.setVisibility(View.INVISIBLE);
             currentGestureText.setVisibility(View.GONE);
             checkMarkImage.setVisibility(View.VISIBLE);
+
+            sounds.playSound(currentGesture);
         }
         else {
             gestureTimer.cancel();
@@ -215,6 +236,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        initSound();
         super.onResume();
         // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
