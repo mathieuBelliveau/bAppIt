@@ -1,19 +1,13 @@
 package mobiledev.unb.ca.bappit;
 
-import android.app.Activity;
 import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.view.View;
-import android.widget.Toast;
-
-import static android.content.Context.AUDIO_SERVICE;
-
-/**
- * Created by win10-ads on 3/10/2018.
- */
+import android.os.AsyncTask;
+import android.util.Log;
+import java.util.concurrent.TimeUnit;
 
 public class Sounds {
     private SoundPool soundPool;
@@ -46,7 +40,7 @@ public class Sounds {
         soundPool = new SoundPool.Builder()
             .setMaxStreams(3)
             .setAudioAttributes(audioAttributes)
-            .build(); //= new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+            .build();
 
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
@@ -65,16 +59,16 @@ public class Sounds {
         // Is the sound loaded does it already play?
         if (loaded) {
             soundPool.play(soundID[sID], volume, volume, 1, 0, 1f);
-            //Toast.makeText(context, "Played sound", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void startMusic()
     {
-        //if (loaded) {
-            backStream = soundPool.play(backMusic, volume, volume, 1, -1, 1f);
-            Toast.makeText(context, "Played background", Toast.LENGTH_SHORT).show();
-        //}
+        Log.i("debug", "starting music");
+
+        StartMusicTask task = new StartMusicTask();
+        task.execute();
+
         /*//Enable looping background music
         mediaPlayer = MediaPlayer.create(context, R.raw.background);
         if(mediaPlayer != null)
@@ -93,27 +87,6 @@ public class Sounds {
         mediaPlayer = null;*/
     }
 
-    /*public void playLoop(View v, int sID) {
-        // Is the sound loaded does it already play?
-        if (loaded && !plays) {
-
-            // the sound will play for ever if we put the loop parameter -1
-            soundPool.play(soundID[sID], volume, volume, 1, -1, 1f);
-            counter = counter++;
-            Toast.makeText(context, "Plays loop", Toast.LENGTH_SHORT).show();
-            plays = true;
-        }
-    }*/
-
-    /*public void pauseSound(View v, int sID) {
-        if (plays) {
-            soundPool.pause(soundID[sID]);
-            soundID = soundPool.load(this, R.raw.beep, counter);
-            Toast.makeText(context, "Pause sound", Toast.LENGTH_SHORT).show();
-            plays = false;
-        }
-    }*/
-
     /*public void stopSound(View v, int sID) {
         if (plays) {
             soundPool.stop(soundID[sID]);
@@ -122,4 +95,31 @@ public class Sounds {
             plays = false;
         }
     }*/
+
+    private class StartMusicTask extends AsyncTask<Void, Integer, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.i("debug", "starting thread");
+            if (loaded) {
+                backStream = soundPool.play(backMusic, volume, volume, 1, -1, 1f);
+                return true;
+            } else {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean startedMusic) {
+            super.onPostExecute(startedMusic);
+            if(!startedMusic) {
+                startMusic();
+            }
+        }
+    }
 }

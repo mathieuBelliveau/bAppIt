@@ -21,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -110,11 +109,6 @@ public class GameActivity extends AppCompatActivity {
 
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         sounds = new Sounds(audioManager, this);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         sounds.startMusic();
     }
 
@@ -246,6 +240,7 @@ public class GameActivity extends AppCompatActivity {
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
         mSensorManager.unregisterListener(mShakeDetector);
+        sounds.stopMusic();
         super.onPause();
     }
 }
