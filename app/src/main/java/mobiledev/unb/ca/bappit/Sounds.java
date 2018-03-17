@@ -1,15 +1,11 @@
 package mobiledev.unb.ca.bappit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
-import android.os.AsyncTask;
 import android.util.Log;
-import java.util.concurrent.TimeUnit;
-
-import static android.content.ContentValues.TAG;
 
 public class Sounds {
     private SoundPool soundPool;
@@ -23,16 +19,26 @@ public class Sounds {
     private  float musicRate;
 
     boolean loaded = false, musicPlaying = false;
-    float actVolume, maxVolume, volume;
+    float musicVolume, soundFXvolume, announcerVolume;
     int counter;
 
 
     public Sounds(AudioManager audioManager, Context context) {
         this.context = context;
 
-        actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        volume = actVolume / maxVolume;
+        SharedPreferences prefs = context.getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE);
+
+        float musicVol = prefs.getInt("MUSIC", 75);
+        float fxVol = prefs.getInt("FX", 75);
+        float voiceVol = prefs.getInt("VOICE", 75);
+
+        float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        musicVolume = actVolume*(musicVol/100) / maxVolume;
+        soundFXvolume = actVolume*(fxVol/100) / maxVolume;
+        announcerVolume = actVolume*(voiceVol/100) / maxVolume;
+
         musicRate = 0.5f;
         // Load the sounds
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -66,12 +72,11 @@ public class Sounds {
     }
 
     public void playSound(int sID, boolean isSoundEffect) {
-        // Is the sound loaded does it already play?
         if (loaded) {
             if(isSoundEffect)
-                soundPool.play(soundFXIds[sID], volume, volume, 1, 0, 1f);
+                soundPool.play(soundFXIds[sID], soundFXvolume, soundFXvolume, 1, 0, 1f);
             else
-                soundPool.play(announcerIds[sID], volume, volume, 1, 0, 1f);
+                soundPool.play(announcerIds[sID], announcerVolume, announcerVolume, 1, 0, 1f);
         }
     }
 
@@ -79,7 +84,7 @@ public class Sounds {
     {
         if(loaded) {
             musicPlaying = true;
-            backStream = soundPool.play(backMusic, volume, volume, 1, -1, musicRate);
+            backStream = soundPool.play(backMusic, musicVolume, musicVolume, 1, -1, musicRate);
         }
     }
 
@@ -93,7 +98,6 @@ public class Sounds {
     public void incrementMusicRate(float rateChange){
         musicRate += rateChange;
         soundPool.setRate(backStream, musicRate);
-        Log.i(TAG, "this is the rate: " + musicRate);
     }
 
 }

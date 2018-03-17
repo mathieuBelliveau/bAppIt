@@ -20,9 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -43,7 +41,7 @@ public class GameActivity extends AppCompatActivity {
     private final static int SHAKE = 2;
     private final static int NUM_GESTURES = 3;
     private final int initialGestureTime = 3000;
-    private final float deltaPlayRate = 0.02f;
+    private float deltaPlayRate;
 
     private int timeForGesture;
     private int currentGesture;
@@ -111,6 +109,7 @@ public class GameActivity extends AppCompatActivity {
     public void startGame() {
         Log.i("debug", "Starting game");
         score = 0;
+        deltaPlayRate = 0.015f;
 
         timeForGesture = initialGestureTime;
         timerProgressBar.setMax(timeForGesture);
@@ -206,11 +205,17 @@ public class GameActivity extends AppCompatActivity {
         currentGestureText.setVisibility(View.VISIBLE);
         checkMarkImage.setVisibility(View.GONE);
 
+
+
         //Set new time limit
-//        timeForGesture -= timeForGesture*0.03; //decrease logarithmically
         timeForGesture -= initialGestureTime * deltaPlayRate;
         timerProgressBar.setMax(timeForGesture);
 
+        //Decrease rate of change after a certain point
+        if(score == 25)
+            deltaPlayRate = 0.01f;
+        if(score == 50)
+            deltaPlayRate = 0.005f;
         sounds.incrementMusicRate(deltaPlayRate);
 
         gestureTimer = new CountDownTimer(timeForGesture, 50) {
@@ -277,7 +282,6 @@ public class GameActivity extends AppCompatActivity {
             if(sounds == null) {
                 //Hardware buttons setting to adjust the media sound
                 GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
                 AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
                 sounds = new Sounds(audioManager,  GameActivity.this);
             }
