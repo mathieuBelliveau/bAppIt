@@ -9,36 +9,38 @@ import android.os.AsyncTask;
 import android.util.Log;
 import java.util.concurrent.TimeUnit;
 
+import static android.content.ContentValues.TAG;
+
 public class Sounds {
     private SoundPool soundPool;
-    private MediaPlayer mediaPlayer;
-    private int[] soundID;
+    private int[] soundFXIds;
+    private int[] announcerIds;
     private Context context;
+
 
     private int backMusic;
     private int backStream;
+    private  float musicRate;
 
-    boolean plays = false, loaded = false;
+    boolean loaded = false, musicPlaying = false;
     float actVolume, maxVolume, volume;
-    AudioManager audioManager;
     int counter;
 
 
     public Sounds(AudioManager audioManager, Context context) {
         this.context = context;
-        soundID = new int[3];
 
         actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         volume = actVolume / maxVolume;
-
+        musicRate = 0.5f;
         // Load the sounds
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .setUsage(AudioAttributes.USAGE_GAME)
                 .build();
         soundPool = new SoundPool.Builder()
-            .setMaxStreams(3)
+            .setMaxStreams(5)
             .setAudioAttributes(audioAttributes)
             .build();
 
@@ -49,77 +51,48 @@ public class Sounds {
             }
         });
 
-        soundID[0] = soundPool.load(context, R.raw.swipe, 1);
-        soundID[1] = soundPool.load(context, R.raw.tap, 1);
-        soundID[2] = soundPool.load(context, R.raw.shake, 1);
-        backMusic = soundPool.load(context,R.raw.background, 1);
+        backMusic = soundPool.load(context,R.raw.background_music_modified, 1);
+
+        soundFXIds = new int[3];
+        soundFXIds[0] = soundPool.load(context, R.raw.fling, 1);
+        soundFXIds[1] = soundPool.load(context, R.raw.tap, 1);
+        soundFXIds[2] = soundPool.load(context, R.raw.shake, 1);
+
+        announcerIds = new int[3];
+        announcerIds[0] = soundPool.load(context, R.raw.flingit_voice, 1);
+        announcerIds[1] = soundPool.load(context, R.raw.tapit_voice, 1);
+        announcerIds[2] = soundPool.load(context, R.raw.shakeit_voice, 1);
+
     }
 
-    public void playSound(int sID) {
+    public void playSound(int sID, boolean isSoundEffect) {
         // Is the sound loaded does it already play?
         if (loaded) {
-            soundPool.play(soundID[sID], volume, volume, 1, 0, 1f);
+            if(isSoundEffect)
+                soundPool.play(soundFXIds[sID], volume, volume, 1, 0, 1f);
+            else
+                soundPool.play(announcerIds[sID], volume, volume, 1, 0, 1f);
         }
     }
 
-    public void startMusic()
+    public void startBackgroundMusic()
     {
-        Log.i("debug", "starting music");
-
-        StartMusicTask task = new StartMusicTask();
-        task.execute();
-
-        /*//Enable looping background music
-        mediaPlayer = MediaPlayer.create(context, R.raw.background);
-        if(mediaPlayer != null)
-        {
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }*/
-
+        if(loaded) {
+            musicPlaying = true;
+            backStream = soundPool.play(backMusic, volume, volume, 1, -1, musicRate);
+        }
     }
 
-    public void stopMusic()
+    public void stopAllMusic()
     {
         soundPool.stop(backStream);
-        /*mediaPlayer.stop();
-        mediaPlayer.release();
-        mediaPlayer = null;*/
+        soundPool.release();
     }
 
-    /*public void stopSound(View v, int sID) {
-        if (plays) {
-            soundPool.stop(soundID[sID]);
-            soundID = soundPool.load(this, R.raw.beep, counter);
-            Toast.makeText(context, "Stop sound", Toast.LENGTH_SHORT).show();
-            plays = false;
-        }
-    }*/
-
-    private class StartMusicTask extends AsyncTask<Void, Integer, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            Log.i("debug", "starting thread");
-            if (loaded) {
-                backStream = soundPool.play(backMusic, volume, volume, 1, -1, 1f);
-                return true;
-            } else {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean startedMusic) {
-            super.onPostExecute(startedMusic);
-            if(!startedMusic) {
-                startMusic();
-            }
-        }
+    public void incrementMusicRate(float rateChange){
+        musicRate += rateChange;
+        soundPool.setRate(backStream, musicRate);
+        Log.i(TAG, "this is the rate: " + musicRate);
     }
+
 }

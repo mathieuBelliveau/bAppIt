@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.view.GestureDetectorCompat;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -34,12 +36,14 @@ public class GameActivity extends AppCompatActivity {
     private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"Swipe It!", "Tap It!", "Shake It!"};
+    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!"};
 
-    private final static int SWIPE = 0;
+    private final static int FLING = 0;
     private final static int TAP = 1;
     private final static int SHAKE = 2;
     private final static int NUM_GESTURES = 3;
+    private final int initialGestureTime = 3000;
+    private final float deltaPlayRate = 0.02f;
 
     private int timeForGesture;
     private int currentGesture;
@@ -66,7 +70,7 @@ public class GameActivity extends AppCompatActivity {
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
         rand = new Random();
 
-        score = 0;
+
 
         quitButton = (Button) (findViewById(R.id.quit_btn));
         quitButton.setOnClickListener(new View.OnClickListener() {
@@ -95,21 +99,32 @@ public class GameActivity extends AppCompatActivity {
         timerProgressBar = (ProgressBar) findViewById(R.id.timeProgressBar);
         checkMarkImage = (ImageView) findViewById(R.id.check_mark_img);
 
+        scoreText.setVisibility(View.GONE);
+        quitButton.setVisibility(View.GONE);
+        currentGestureText.setVisibility(View.GONE);
+        timerProgressBar.setVisibility(View.GONE);
+        checkMarkImage.setVisibility(View.GONE);
 
-        timeForGesture = 3000;
+        loadResources();
+    }
+
+    public void startGame() {
+        Log.i("debug", "Starting game");
+        score = 0;
+
+        timeForGesture = initialGestureTime;
         timerProgressBar.setMax(timeForGesture);
+
+        scoreText.setVisibility(View.VISIBLE);
+        quitButton.setVisibility(View.VISIBLE);
 
         changeGesture();
     }
 
-    private void initSound()
+    private void loadResources()
     {
-        //Hardware buttons setting to adjust the media sound
-        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-        sounds = new Sounds(audioManager, this);
-        sounds.startMusic();
+        LoadResourcesTask task = new LoadResourcesTask();
+        task.execute();
     }
 
     private void increaseScore() {
@@ -118,7 +133,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gameOver() {
-        sounds.stopMusic();
+        sounds.stopAllMusic();
         Intent finishIntent = new Intent(GameActivity.this, FinalScoreActivity.class);
         finishIntent.putExtra(FinalScoreActivity.FINAL_SCORE, score);
         startActivity(finishIntent);
@@ -144,7 +159,7 @@ public class GameActivity extends AppCompatActivity {
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-            checkGesture(SWIPE);
+            checkGesture(FLING);
             return true;
         }
 
@@ -166,7 +181,8 @@ public class GameActivity extends AppCompatActivity {
             currentGestureText.setVisibility(View.GONE);
             checkMarkImage.setVisibility(View.VISIBLE);
 
-            sounds.playSound(currentGesture);
+            //Play sound effect for correct gesture
+            sounds.playSound(currentGesture, true);
         }
         else {
             gestureTimer.cancel();
@@ -175,19 +191,28 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void changeGesture() {
+        //Generate new random gesture
         currentGesture = rand.nextInt(NUM_GESTURES);
-
-        currentGestureText.setText(gestures[currentGesture]);
-
         gestureComplete = false;
+
+        //Play announcer sound clip for correct gesture
+        if(sounds != null)
+            sounds.playSound(currentGesture, false);
+
+        //Update UI elements
+        currentGestureText.setText(gestures[currentGesture]);
         RunTextAnimation();
         timerProgressBar.setVisibility(View.VISIBLE);
         currentGestureText.setVisibility(View.VISIBLE);
         checkMarkImage.setVisibility(View.GONE);
 
-        timeForGesture -= timeForGesture*0.03; //decrease logarithmically
+        //Set new time limit
+//        timeForGesture -= timeForGesture*0.03; //decrease logarithmically
+        timeForGesture -= initialGestureTime * deltaPlayRate;
         timerProgressBar.setMax(timeForGesture);
-        
+
+        sounds.incrementMusicRate(deltaPlayRate);
+
         gestureTimer = new CountDownTimer(timeForGesture, 50) {
             public void onTick(long millisUntilFinished) {
                 if(!gestureComplete) {
@@ -230,7 +255,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        initSound();
+        loadResources();
         super.onResume();
         // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
@@ -240,7 +265,48 @@ public class GameActivity extends AppCompatActivity {
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
         mSensorManager.unregisterListener(mShakeDetector);
-        sounds.stopMusic();
+        sounds.stopAllMusic();
         super.onPause();
+    }
+
+    private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};
+    private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
+        @Override
+        protected MusicState doInBackground(Void... params) {
+            Log.i("debug", "starting thread");
+            if(sounds == null) {
+                //Hardware buttons setting to adjust the media sound
+                GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                sounds = new Sounds(audioManager,  GameActivity.this);
+            }
+
+            if(sounds.loaded && sounds.musicPlaying) {
+                return MusicState.PLAYING;
+            }
+            else if (sounds.loaded) {
+                sounds.startBackgroundMusic();
+                return MusicState.JUST_STARTED;
+            } else {
+                try {
+                   Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return MusicState.STILL_LOADING;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(MusicState state) {
+            super.onPostExecute(state);
+            if(state == MusicState.JUST_STARTED) {
+                startGame();
+            }
+            else if (state == MusicState.STILL_LOADING) {
+                loadResources();
+            }
+        }
     }
 }
