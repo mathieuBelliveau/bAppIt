@@ -87,6 +87,14 @@ public class Sounds {
         mediaPlayer = null;*/
     }
 
+    public void setVolume(int sID, float vol)//streamID
+    {
+        if(loaded)
+        {
+            soundPool.setVolume(soundID[sID],vol,vol);
+        }
+    }
+
     /*public void stopSound(View v, int sID) {
         if (plays) {
             soundPool.stop(soundID[sID]);

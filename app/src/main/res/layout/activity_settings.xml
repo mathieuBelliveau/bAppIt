@@ -45,7 +45,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AccouncerSeekBar" />
+        app:layout_constraintTop_toBottomOf="@+id/AnnouncerSeekBar" />
 
     <TextView
         android:id="@+id/AnnouncerText"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/SFXSeekBar" />
 
     <SeekBar
-        android:id="@+id/AccouncerSeekBar"
+        android:id="@+id/AnnouncerSeekBar"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginLeft="8dp"
