@@ -34,12 +34,13 @@ public class GameActivity extends AppCompatActivity {
     private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!"};
+    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Tilt it!"};
 
     private final static int FLING = 0;
     private final static int TAP = 1;
     private final static int SHAKE = 2;
-    private final static int NUM_GESTURES = 3;
+    private final static int TILT = 3;
+    private final static int NUM_GESTURES = 4;
     private final int initialGestureTime = 3000;
     private float deltaPlayRate;
 
@@ -54,6 +55,9 @@ public class GameActivity extends AppCompatActivity {
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
 
+    private Sensor mGyroscope;
+    private TiltDetector mTiltDetector;
+
     Random rand;
 
     private GestureDetectorCompat mDetector;
@@ -67,8 +71,6 @@ public class GameActivity extends AppCompatActivity {
 
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
         rand = new Random();
-
-
 
         quitButton = (Button) (findViewById(R.id.quit_btn));
         quitButton.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +91,17 @@ public class GameActivity extends AppCompatActivity {
             public void onShake(int count) {
                 Log.d(DEBUG_TAG, "onShake: " + count);
                 checkGesture(SHAKE);
+            }
+        });
+
+        //Tilt Detector
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mTiltDetector = new TiltDetector();
+        mTiltDetector.setOnTiltListener(new TiltDetector.OnTiltListener() {
+            @Override
+            public void onTilt(float tilt) {
+                Log.d(DEBUG_TAG, "onTilt" + tilt);
+                checkGesture(TILT);
             }
         });
 
@@ -157,14 +170,12 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
             checkGesture(FLING);
             return true;
         }
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            Log.d(DEBUG_TAG, "onTap: " + e.toString());
             checkGesture(TAP);
             return true;
         }
@@ -264,12 +275,14 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(mTiltDetector, mGyroscope, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
         mSensorManager.unregisterListener(mShakeDetector);
+        mSensorManager.unregisterListener(mTiltDetector);
         sounds.stopAllMusic();
         super.onPause();
     }
@@ -278,7 +291,6 @@ public class GameActivity extends AppCompatActivity {
     private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
         @Override
         protected MusicState doInBackground(Void... params) {
-            Log.i("debug", "starting thread");
             if(sounds == null) {
                 //Hardware buttons setting to adjust the media sound
                 GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
