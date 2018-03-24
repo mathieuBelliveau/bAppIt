@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -40,13 +41,14 @@ public class GameActivity extends AppCompatActivity {
     private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Tilt it!"};
+    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Tilt it!", "Zoom it!"};
 
     private final static int FLING = 0;
     private final static int TAP = 1;
     private final static int SHAKE = 2;
     private final static int TILT = 3;
-    private final static int NUM_GESTURES = 4;
+    private final static int ZOOM = 4;
+    private final static int NUM_GESTURES = 5;
     private final int initialGestureTime = 3000;
     private float deltaPlayRate;
 
@@ -71,6 +73,7 @@ public class GameActivity extends AppCompatActivity {
 
 
     private GestureDetectorCompat mDetector;
+    private ScaleGestureDetector mScaleDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class GameActivity extends AppCompatActivity {
         hideSystemUI();
 
         mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
         rand = new Random();
 
         quitButton = (Button) (findViewById(R.id.quit_btn));
@@ -183,6 +187,11 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
+//        boolean retVal = this.mScaleDetector.onTouchEvent(event);
+//        retVal = this.mDetector.onTouchEvent(event) || retVal;
+//
+//        return retVal || super.onTouchEvent(event);
+        this.mScaleDetector.onTouchEvent(event);
         this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
@@ -199,8 +208,12 @@ public class GameActivity extends AppCompatActivity {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
-            checkGesture(FLING);
-            return true;
+            if (currentGesture != ZOOM) {
+                checkGesture(FLING);
+                Log.i(DEBUG_TAG, "I'm flingin'!");
+                return true;
+            }
+            return false;
         }
 
         @Override
@@ -209,6 +222,14 @@ public class GameActivity extends AppCompatActivity {
             return true;
         }
 
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            Log.i(DEBUG_TAG, "scale factor: " + detector.getScaleFactor());
+            checkGesture(ZOOM);
+        }
     }
 
     private void checkGesture(int gesture) {

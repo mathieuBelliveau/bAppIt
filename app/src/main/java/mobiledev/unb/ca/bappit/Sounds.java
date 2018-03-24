@@ -59,19 +59,21 @@ public class Sounds {
 
         backMusic = soundPool.load(context,R.raw.background_music_modified, 1);
 
-        soundFXIds = new int[4];
+        soundFXIds = new int[5];
         soundFXIds[0] = soundPool.load(context, R.raw.fling, 1);
         soundFXIds[1] = soundPool.load(context, R.raw.tap, 1);
         soundFXIds[2] = soundPool.load(context, R.raw.shake, 1);
         //TEMP
         soundFXIds[3] = soundPool.load(context, R.raw.shake, 1);
+        soundFXIds[4] = soundPool.load(context, R.raw.shake, 1);
 
-        announcerIds = new int[4];
+        announcerIds = new int[5];
         announcerIds[0] = soundPool.load(context, R.raw.flingit_voice, 1);
         announcerIds[1] = soundPool.load(context, R.raw.tapit_voice, 1);
         announcerIds[2] = soundPool.load(context, R.raw.shakeit_voice, 1);
         //TEMP
         announcerIds[3] = soundPool.load(context, R.raw.shakeit_voice, 1);
+        announcerIds[4] = soundPool.load(context, R.raw.shakeit_voice, 1);
 
     }
 

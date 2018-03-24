@@ -61,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onPause();
         applyChanges();
         Toast.makeText(this, "Settings saved!",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT).show();
     }
 
     private void applyChanges()
