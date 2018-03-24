@@ -27,10 +27,11 @@ public class Sounds {
         this.context = context;
 
         SharedPreferences prefs = context.getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE);
+        
+        float musicVol = prefs.getInt(SettingsActivity.MUSIC, 100);
+        float fxVol = prefs.getInt(SettingsActivity.FX, 100);
+        float voiceVol = prefs.getInt(SettingsActivity.VOICE, 100);
 
-        float musicVol = prefs.getInt(SettingsActivity.MUSIC, 75);
-        float fxVol = prefs.getInt(SettingsActivity.FX, 75);
-        float voiceVol = prefs.getInt(SettingsActivity.VOICE, 75);
 
         float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -59,15 +60,19 @@ public class Sounds {
 
         backMusic = soundPool.load(context,R.raw.background_music_modified, 1);
 
-        soundFXIds = new int[3];
+        soundFXIds = new int[4];
         soundFXIds[0] = soundPool.load(context, R.raw.fling, 1);
         soundFXIds[1] = soundPool.load(context, R.raw.tap, 1);
         soundFXIds[2] = soundPool.load(context, R.raw.shake, 1);
+        //TEMP
+        soundFXIds[3] = soundPool.load(context, R.raw.shake, 1);
 
-        announcerIds = new int[3];
+        announcerIds = new int[4];
         announcerIds[0] = soundPool.load(context, R.raw.flingit_voice, 1);
         announcerIds[1] = soundPool.load(context, R.raw.tapit_voice, 1);
         announcerIds[2] = soundPool.load(context, R.raw.shakeit_voice, 1);
+        //TEMP
+        announcerIds[3] = soundPool.load(context, R.raw.shakeit_voice, 1);
 
     }
 
