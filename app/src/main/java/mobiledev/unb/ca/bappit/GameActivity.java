@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.Arrays;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
@@ -165,13 +167,17 @@ public class GameActivity extends AppCompatActivity {
 
     private void vibrate()
     {
-        if(isVibrate)
+        if(isVibrate){
+            /*int[] arr = new int[18];
+            Arrays.fill(arr,255);
+            ((Vibrator) getSystemService(VIBRATOR_SERVICE))
+                    .vibrate(VibrationEffect.createWaveform(new long[]{0, 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500}, arr,-1));*/
             if (Build.VERSION.SDK_INT >= 26) {//To accommodate deprecation across builds
                 ((Vibrator) getSystemService(VIBRATOR_SERVICE))
-                        .vibrate(VibrationEffect.createOneShot(750, VibrationEffect.DEFAULT_AMPLITUDE));
+                        .vibrate(VibrationEffect.createOneShot(750,255));
             } else {
                 ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(750);
-            }
+            }}
     }
 
 
