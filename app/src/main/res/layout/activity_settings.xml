@@ -165,9 +165,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/MusicText" />
 
+
     <Switch
         android:id="@+id/VibrationSwitch"
         style="?android:attr/switchStyle"
+
         android:layout_width="90dp"
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
@@ -178,9 +180,14 @@
         android:checked="true"
         android:hapticFeedbackEnabled="true"
         android:progressTint="@android:color/holo_orange_light"
+        android:showText="true"
         android:splitTrack="false"
-        android:text="Switch"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat.Small"
         android:textAlignment="textStart"
+        android:textColor="@android:color/white"
+        android:textOff="Off"
+        android:textOn="On"
+        android:textSize="12sp"
         android:thumbTint="#ff9412"
         android:trackTint="@android:color/background_light"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -188,7 +195,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/VibrationText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:checked="false" />
 
     <TextView
         android:id="@+id/saveButton"

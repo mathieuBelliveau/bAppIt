@@ -28,9 +28,9 @@ public class Sounds {
 
         SharedPreferences prefs = context.getSharedPreferences("SettingsPrefs", Context.MODE_PRIVATE);
 
-        float musicVol = prefs.getInt("MUSIC", 75);
-        float fxVol = prefs.getInt("FX", 75);
-        float voiceVol = prefs.getInt("VOICE", 75);
+        float musicVol = prefs.getInt(SettingsActivity.MUSIC, 75);
+        float fxVol = prefs.getInt(SettingsActivity.FX, 75);
+        float voiceVol = prefs.getInt(SettingsActivity.VOICE, 75);
 
         float actVolume = (float) audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         float maxVolume = (float) audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);

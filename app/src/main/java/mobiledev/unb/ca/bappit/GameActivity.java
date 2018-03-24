@@ -2,12 +2,16 @@ package mobiledev.unb.ca.bappit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -54,7 +58,9 @@ public class GameActivity extends AppCompatActivity {
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
 
-    Random rand;
+    private Random rand;
+
+    private boolean isVibrate;
 
     private GestureDetectorCompat mDetector;
 
@@ -111,6 +117,9 @@ public class GameActivity extends AppCompatActivity {
         score = 0;
         deltaPlayRate = 0.015f;
 
+        SharedPreferences prefs = GameActivity.this.getSharedPreferences(SettingsActivity.PREFS, Context.MODE_PRIVATE);
+        isVibrate = prefs.getBoolean(SettingsActivity.VIBRATE,true);
+
         timeForGesture = initialGestureTime;
         timerProgressBar.setMax(timeForGesture);
 
@@ -133,9 +142,21 @@ public class GameActivity extends AppCompatActivity {
 
     private void gameOver() {
         sounds.stopAllMusic();
+        vibrate();//FIXME - Probably want it on a separate thread
         Intent finishIntent = new Intent(GameActivity.this, FinalScoreActivity.class);
         finishIntent.putExtra(FinalScoreActivity.FINAL_SCORE, score);
         startActivity(finishIntent);
+    }
+
+    private void vibrate()
+    {
+        if(isVibrate)
+            if (Build.VERSION.SDK_INT >= 26) {//To accommodate deprecation across builds
+                ((Vibrator) getSystemService(VIBRATOR_SERVICE))
+                        .vibrate(VibrationEffect.createOneShot(750, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(750);
+            }
     }
 
 
@@ -279,6 +300,7 @@ public class GameActivity extends AppCompatActivity {
         @Override
         protected MusicState doInBackground(Void... params) {
             Log.i("debug", "starting thread");
+
             if(sounds == null) {
                 //Hardware buttons setting to adjust the media sound
                 GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
