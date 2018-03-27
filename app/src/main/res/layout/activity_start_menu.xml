@@ -70,5 +70,24 @@
         app:layout_constraintStart_toStartOf="@+id/start_btn"
         app:layout_constraintTop_toTopOf="@+id/start_btn" />
 
+    <Button
+        android:id="@+id/tutorial_btn"
+        android:layout_width="82dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/purple_circle"
+        android:text="Tutorial"
+        app:layout_constraintBottom_toTopOf="@+id/start_btn"
+        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.296"
+        tools:layout_editor_absoluteX="252dp"
+        tools:layout_editor_absoluteY="19dp" />
+
 
 </android.support.constraint.ConstraintLayout>

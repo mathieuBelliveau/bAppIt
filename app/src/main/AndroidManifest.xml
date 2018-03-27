@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mobiledev.unb.ca.bappit">
 
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -23,17 +26,18 @@
         </activity>
         <activity
             android:name=".GameActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".FinalScoreActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".HighScoresActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity android:name=".TutorialActivity" />
+        <activity android:name=".TutorialVideo"></activity>
     </application>
-
 
 </manifest>

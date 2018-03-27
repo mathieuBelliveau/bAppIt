@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
@@ -41,12 +40,12 @@ public class GameActivity extends AppCompatActivity {
     private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Tilt it!", "Zoom it!"};
+    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Twist It!", "Zoom It!"};
 
     private final static int FLING = 0;
     private final static int TAP = 1;
     private final static int SHAKE = 2;
-    private final static int TILT = 3;
+    private final static int TWIST = 3;
     private final static int ZOOM = 4;
     private final static int NUM_GESTURES = 5;
     private final int initialGestureTime = 3000;
@@ -115,7 +114,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onTilt(float tilt) {
                 Log.d(DEBUG_TAG, "onTilt" + tilt);
-                checkGesture(TILT);
+                checkGesture(TWIST);
             }
         });
 
@@ -334,6 +333,7 @@ public class GameActivity extends AppCompatActivity {
         mSensorManager.unregisterListener(mShakeDetector);
         mSensorManager.unregisterListener(mTiltDetector);
         sounds.stopAllMusic();
+        gestureTimer.cancel();
         super.onPause();
     }
 

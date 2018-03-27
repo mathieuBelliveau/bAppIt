@@ -15,7 +15,7 @@ public class ShakeDetector implements SensorEventListener {
      * from the Google Play Store and run it to see how
      *  many G's it takes to register a shake
      */
-    private static final float SHAKE_THRESHOLD_GRAVITY = 4.0f; //2.7
+    private static final float SHAKE_THRESHOLD_GRAVITY = 3.8f; //2.7
     private static final int SHAKE_SLOP_TIME_MS = 400;
     private static final int SHAKE_COUNT_RESET_TIME_MS = 2000;
 

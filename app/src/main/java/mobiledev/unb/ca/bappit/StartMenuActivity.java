@@ -13,6 +13,7 @@ public class StartMenuActivity extends AppCompatActivity {
     View mainView;
 
     private Button highScoresButton;
+    private Button tutorialButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,15 @@ public class StartMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(StartMenuActivity.this, HighScoresActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tutorialButton = (Button) findViewById(R.id.tutorial_btn);
+        tutorialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StartMenuActivity.this, TutorialActivity.class);
                 startActivity(intent);
             }
         });

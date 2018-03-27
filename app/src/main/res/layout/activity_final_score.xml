@@ -158,17 +158,17 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="casual"
-        android:text="Best \n83"
+        android:text="Best\n83"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/sideCircle"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintLeft_toLeftOf="@+id/sideCircle"
         app:layout_constraintRight_toRightOf="@+id/sideCircle"
         app:layout_constraintTop_toTopOf="@+id/sideCircle"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.63" />
+        app:layout_constraintVertical_bias="0.594" />
 
     <EditText
         android:id="@+id/name_edit_text"
