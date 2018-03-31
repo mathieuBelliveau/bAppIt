@@ -72,22 +72,25 @@
 
     <Button
         android:id="@+id/tutorial_btn"
-        android:layout_width="82dp"
-        android:layout_height="72dp"
+        android:layout_width="84dp"
+        android:layout_height="81dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/purple_circle"
-        android:text="Tutorial"
-        app:layout_constraintBottom_toTopOf="@+id/start_btn"
-        app:layout_constraintHorizontal_bias="0.933"
+        android:fontFamily="casual"
+        android:text="Guide"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.296"
-        tools:layout_editor_absoluteX="252dp"
-        tools:layout_editor_absoluteY="19dp" />
+        app:layout_constraintVertical_bias="0.043"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="274dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Debug;
+import android.util.Log;
 
 public class Sounds {
     private SoundPool soundPool;
@@ -59,20 +61,18 @@ public class Sounds {
         backMusic = soundPool.load(context,R.raw.background_music_modified, 1);
 
         soundFXIds = new int[5];
-        soundFXIds[0] = soundPool.load(context, R.raw.fling_it_effect, 1);
-        soundFXIds[1] = soundPool.load(context, R.raw.tap, 1);
-        soundFXIds[2] = soundPool.load(context, R.raw.shake, 1);
-        //TEMP
-        soundFXIds[3] = soundPool.load(context, R.raw.twist_it_effect, 1);
-        soundFXIds[4] = soundPool.load(context, R.raw.zoom, 1);
+        soundFXIds[0] = soundPool.load(context, R.raw.fx_fling_it, 1);
+        soundFXIds[1] = soundPool.load(context, R.raw.fx_tap_it, 1);
+        soundFXIds[2] = soundPool.load(context, R.raw.fx_shake_it, 1);
+        soundFXIds[3] = soundPool.load(context, R.raw.fx_twist_it, 1);
+        soundFXIds[4] = soundPool.load(context, R.raw.fx_zoom_it, 1);
 
         announcerIds = new int[5];
-        announcerIds[0] = soundPool.load(context, R.raw.flingit_voice, 1);
-        announcerIds[1] = soundPool.load(context, R.raw.tapit_voice, 1);
-        announcerIds[2] = soundPool.load(context, R.raw.shakeit_voice, 1);
-        //TEMP
-        announcerIds[3] = soundPool.load(context, R.raw.shakeit_voice, 1);
-        announcerIds[4] = soundPool.load(context, R.raw.shakeit_voice, 1);
+        announcerIds[0] = soundPool.load(context, R.raw.voice_fling_it, 1);
+        announcerIds[1] = soundPool.load(context, R.raw.voice_tap_it, 1);
+        announcerIds[2] = soundPool.load(context, R.raw.voice_shake_it, 1);
+        announcerIds[3] = soundPool.load(context, R.raw.voice_twist_it, 1);
+        announcerIds[4] = soundPool.load(context, R.raw.voice_zoom_it, 1);
 
     }
 

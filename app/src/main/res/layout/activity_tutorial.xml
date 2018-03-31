@@ -4,17 +4,108 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="mobiledev.unb.ca.bappit.TutorialActivity">
+    tools:context="mobiledev.unb.ca.bappit.TutorialActivity"
+    android:background="@android:color/background_dark">
 
-    <ListView
-        android:id="@+id/gestures_list"
-        android:layout_width="match_parent"
-        android:layout_height="408dp"
-        android:layout_marginBottom="156dp"
+    <!--<ListView-->
+        <!--android:id="@+id/gestures_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="408dp"-->
+        <!--android:layout_marginBottom="156dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.454"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent" />-->
+
+
+    <Button
+        android:id="@+id/guide_swipe_btn"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/orange_circle"
+        android:fontFamily="casual"
+        android:rotation="-30"
+        android:text="Fling It!"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/guide_bappit_btn"
+        app:layout_constraintVertical_bias="0.676" />
 
+    <Button
+        android:id="@+id/guide_shake_btn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/purple_circle"
+        android:fontFamily="casual"
+        android:rotation="13"
+        android:text="Shake It!"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_bappit_btn"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.455" />
 
+    <Button
+        android:id="@+id/guide_zoom_btn"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/yellow_circle"
+        android:fontFamily="casual"
+        android:rotation="10"
+        android:text="Zoom It!"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guide_bappit_btn"
+        app:layout_constraintVertical_bias="0.544" />
+
+    <Button
+        android:id="@+id/guide_twist_btn"
+        android:layout_width="145dp"
+        android:layout_height="145dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="41dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/lightblue_circle"
+        android:fontFamily="casual"
+        android:rotation="-13"
+        android:text="Twist It!"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/guide_bappit_btn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.247" />
+
+    <Button
+        android:id="@+id/guide_bappit_btn"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/green_circle"
+        android:fontFamily="casual"
+        android:rotation="-8"
+        android:text="Tap It!"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
