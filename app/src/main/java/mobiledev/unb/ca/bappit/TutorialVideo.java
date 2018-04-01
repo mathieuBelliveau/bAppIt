@@ -22,8 +22,8 @@ public class TutorialVideo extends AppCompatActivity {
         int gestureID = intent.getIntExtra(GESTURE_VIDEO_ID, 0);
         String gestureName = intent.getStringExtra(GESTURE_NAME);
 
-        TextView guestureNameView = (TextView) findViewById(R.id.action_name);
-        guestureNameView.setText(gestureName);
+        TextView gestureNameView = (TextView) findViewById(R.id.action_name);
+        gestureNameView.setText(gestureName);
 
         VideoView video = (VideoView)findViewById(R.id.tutorial_video);
         Uri uri = Uri.parse("android.resource://" + getPackageName()+ "/" + gestureID);
@@ -32,6 +32,7 @@ public class TutorialVideo extends AppCompatActivity {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 mp.setLooping(true);
+                mp.setVolume(0, 0);
             }
         });
         video.start();

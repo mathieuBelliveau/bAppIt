@@ -54,18 +54,14 @@ public class Sounds {
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                loaded = true;
+                counter++;
+                if(counter == 11) {
+                    loaded = true;
+                }
             }
         });
 
         backMusic = soundPool.load(context,R.raw.background_music_modified, 1);
-
-        soundFXIds = new int[5];
-        soundFXIds[0] = soundPool.load(context, R.raw.fx_fling_it, 1);
-        soundFXIds[1] = soundPool.load(context, R.raw.fx_tap_it, 1);
-        soundFXIds[2] = soundPool.load(context, R.raw.fx_shake_it, 1);
-        soundFXIds[3] = soundPool.load(context, R.raw.fx_twist_it, 1);
-        soundFXIds[4] = soundPool.load(context, R.raw.fx_zoom_it, 1);
 
         announcerIds = new int[5];
         announcerIds[0] = soundPool.load(context, R.raw.voice_fling_it, 1);
@@ -73,6 +69,13 @@ public class Sounds {
         announcerIds[2] = soundPool.load(context, R.raw.voice_shake_it, 1);
         announcerIds[3] = soundPool.load(context, R.raw.voice_twist_it, 1);
         announcerIds[4] = soundPool.load(context, R.raw.voice_zoom_it, 1);
+
+        soundFXIds = new int[5];
+        soundFXIds[0] = soundPool.load(context, R.raw.fx_fling_it, 1);
+        soundFXIds[1] = soundPool.load(context, R.raw.fx_tap_it, 1);
+        soundFXIds[2] = soundPool.load(context, R.raw.fx_shake_it, 1);
+        soundFXIds[3] = soundPool.load(context, R.raw.fx_twist_it, 1);
+        soundFXIds[4] = soundPool.load(context, R.raw.fx_zoom_it, 1);
 
     }
 
@@ -104,5 +107,4 @@ public class Sounds {
         musicRate += rateChange;
         soundPool.setRate(backStream, musicRate);
     }
-
 }
