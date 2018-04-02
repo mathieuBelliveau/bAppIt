@@ -101,7 +101,7 @@
         android:background="@drawable/green_circle"
         android:fontFamily="casual"
         android:rotation="-8"
-        android:text="Tap It!"
+        android:text="bApp It!"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"

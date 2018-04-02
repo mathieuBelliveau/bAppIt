@@ -1,14 +1,16 @@
 package mobiledev.unb.ca.bappit;
 
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class StartMenuActivity extends AppCompatActivity {
 
-    Button startButton;
+    ImageView startButton;
     Button settingsButton;
     View mainView;
 
@@ -21,7 +23,7 @@ public class StartMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_menu);
         mainView = getWindow().getDecorView();
 
-        startButton = (Button) findViewById(R.id.start_btn);
+        startButton = (ImageView) findViewById(R.id.start_btn);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

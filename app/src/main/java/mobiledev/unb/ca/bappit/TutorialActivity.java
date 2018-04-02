@@ -33,7 +33,7 @@ public class TutorialActivity extends AppCompatActivity {
 
         ArrayList<Gesture> gestures = new ArrayList<Gesture>();
         gestures.add(new Gesture("Fling It!", R.raw.vid_fling_it, R.id.guide_swipe_btn));
-        gestures.add(new Gesture("Tap It!", R.raw.vid_tap_it, R.id.guide_bappit_btn));
+        gestures.add(new Gesture("bApp It!", R.raw.vid_tap_it, R.id.guide_bappit_btn));
         gestures.add(new Gesture("Shake It!", R.raw.vid_shake_it, R.id.guide_shake_btn));
         gestures.add(new Gesture("Twist It!", R.raw.vid_twist_it, R.id.guide_twist_btn));
         gestures.add(new Gesture("Zoom It!", R.raw.vid_zoom_it, R.id.guide_zoom_btn));

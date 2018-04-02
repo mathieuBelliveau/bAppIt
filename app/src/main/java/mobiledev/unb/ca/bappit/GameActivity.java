@@ -37,13 +37,14 @@ public class GameActivity extends AppCompatActivity {
 
     private Button quitButton;
     private TextView scoreText;
-    private TextView currentGestureText;
+    private ImageView currentGestureImage;
+//    private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static String[] gestures = new String[] {"Fling It!", "Tap It!", "Shake It!", "Twist It!", "Zoom It!"};
+    private final static int[] gestures = new int[] {R.mipmap.fling_it, R.mipmap.bappit, R.mipmap.shake_it, R.mipmap.twist_it, R.mipmap.zoom_it};
 
     private final static int FLING = 0;
-    private final static int TAP = 1;
+    private final static int BAPP = 1;
     private final static int SHAKE = 2;
     private final static int TWIST = 3;
     private final static int ZOOM = 4;
@@ -119,13 +120,15 @@ public class GameActivity extends AppCompatActivity {
         });
 
         scoreText = (TextView) findViewById(R.id.score_txt);
-        currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
+        currentGestureImage = (ImageView) (findViewById(R.id.current_gesture_img));
+//        currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
         timerProgressBar = (ProgressBar) findViewById(R.id.timeProgressBar);
         checkMarkImage = (ImageView) findViewById(R.id.check_mark_img);
 
         scoreText.setVisibility(View.GONE);
         quitButton.setVisibility(View.GONE);
-        currentGestureText.setVisibility(View.GONE);
+//        currentGestureText.setVisibility(View.GONE);
+        currentGestureImage.setVisibility(View.GONE);
         timerProgressBar.setVisibility(View.GONE);
         checkMarkImage.setVisibility(View.GONE);
 
@@ -171,11 +174,7 @@ public class GameActivity extends AppCompatActivity {
     private void vibrate()
     {
         if(isVibrate){
-            /*int[] arr = new int[18];
-            Arrays.fill(arr,255);
-            ((Vibrator) getSystemService(VIBRATOR_SERVICE))
-                    .vibrate(VibrationEffect.createWaveform(new long[]{0, 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500}, arr,-1));*/
-            if (Build.VERSION.SDK_INT >= 26) {//To accommodate deprecation across builds
+           if (Build.VERSION.SDK_INT >= 26) {//To accommodate deprecation across builds
                 ((Vibrator) getSystemService(VIBRATOR_SERVICE))
                         .vibrate(VibrationEffect.createOneShot(750,255));
             } else {
@@ -186,10 +185,6 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-//        boolean retVal = this.mScaleDetector.onTouchEvent(event);
-//        retVal = this.mDetector.onTouchEvent(event) || retVal;
-//
-//        return retVal || super.onTouchEvent(event);
         this.mScaleDetector.onTouchEvent(event);
         this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
@@ -199,17 +194,10 @@ public class GameActivity extends AppCompatActivity {
         private static final String DEBUG_TAG = "Gestures";
 
         @Override
-        public boolean onDown(MotionEvent event) {
-            Log.d(DEBUG_TAG,"onDown: " + event.toString());
-            return true;
-        }
-
-        @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             if (currentGesture != ZOOM) {
                 checkGesture(FLING);
-                Log.i(DEBUG_TAG, "I'm flingin'!");
                 return true;
             }
             return false;
@@ -217,7 +205,7 @@ public class GameActivity extends AppCompatActivity {
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            checkGesture(TAP);
+            checkGesture(BAPP);
             return true;
         }
 
@@ -226,7 +214,6 @@ public class GameActivity extends AppCompatActivity {
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
-            Log.i(DEBUG_TAG, "scale factor: " + detector.getScaleFactor());
             checkGesture(ZOOM);
         }
     }
@@ -237,7 +224,8 @@ public class GameActivity extends AppCompatActivity {
             gestureComplete = true;
 
             timerProgressBar.setVisibility(View.INVISIBLE);
-            currentGestureText.setVisibility(View.GONE);
+            //currentGestureText.setVisibility(View.GONE);
+            currentGestureImage.setVisibility(View.GONE);
             checkMarkImage.setVisibility(View.VISIBLE);
 
             //Play sound effect for correct gesture
@@ -259,12 +247,11 @@ public class GameActivity extends AppCompatActivity {
             sounds.playSound(currentGesture, false);
 
         //Update UI elements
-        currentGestureText.setText(gestures[currentGesture]);
+        currentGestureImage.setImageResource(gestures[currentGesture]);
         RunTextAnimation();
         timerProgressBar.setVisibility(View.VISIBLE);
-        currentGestureText.setVisibility(View.VISIBLE);
+        currentGestureImage.setVisibility(View.VISIBLE);
         checkMarkImage.setVisibility(View.GONE);
-
 
 
         //Set new time limit
@@ -306,9 +293,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void hideSystemUI() {
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
         gameView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -322,7 +306,6 @@ public class GameActivity extends AppCompatActivity {
     public void onResume() {
         loadResources();
         super.onResume();
-        // Add the following line to register the Session Manager Listener onResume
         mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
         mSensorManager.registerListener(mTiltDetector, mGyroscope, SensorManager.SENSOR_DELAY_GAME);
     }

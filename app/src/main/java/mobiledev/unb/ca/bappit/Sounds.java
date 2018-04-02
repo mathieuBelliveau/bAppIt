@@ -65,7 +65,7 @@ public class Sounds {
 
         announcerIds = new int[5];
         announcerIds[0] = soundPool.load(context, R.raw.voice_fling_it, 1);
-        announcerIds[1] = soundPool.load(context, R.raw.voice_tap_it, 1);
+        announcerIds[1] = soundPool.load(context, R.raw.voice_bapp_it, 1);
         announcerIds[2] = soundPool.load(context, R.raw.voice_shake_it, 1);
         announcerIds[3] = soundPool.load(context, R.raw.voice_twist_it, 1);
         announcerIds[4] = soundPool.load(context, R.raw.voice_zoom_it, 1);
