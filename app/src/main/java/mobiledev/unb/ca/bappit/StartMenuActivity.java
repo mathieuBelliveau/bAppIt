@@ -1,6 +1,5 @@
 package mobiledev.unb.ca.bappit;
 
-import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -13,9 +12,6 @@ public class StartMenuActivity extends AppCompatActivity {
     ImageView startButton;
     Button settingsButton;
     View mainView;
-
-    private Button highScoresButton;
-    private Button tutorialButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +38,7 @@ public class StartMenuActivity extends AppCompatActivity {
             }
         });
 
-        highScoresButton = (Button) findViewById(R.id.highscore_btn);
+        Button highScoresButton = (Button) findViewById(R.id.highscore_btn);
         highScoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +47,7 @@ public class StartMenuActivity extends AppCompatActivity {
             }
         });
 
-        tutorialButton = (Button) findViewById(R.id.tutorial_btn);
+        Button tutorialButton = (Button) findViewById(R.id.tutorial_btn);
         tutorialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

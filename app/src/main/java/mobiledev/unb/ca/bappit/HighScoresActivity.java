@@ -30,9 +30,6 @@ public class HighScoresActivity extends AppCompatActivity {
         mResultsTextView = (TextView) findViewById(R.id.hs_results_text);
         mDbHelper = new DBHelper(this);
 
-//        SQLiteDatabase db = mDbHelper.getWritableDatabase();
-//        db.execSQL("delete from "+ DBHelper.TABLE_NAME);
-
         QueryTask task = new QueryTask();
         task.execute();
     }
@@ -54,11 +51,6 @@ public class HighScoresActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Cursor result) {
-            String[] projection = {
-                    DBHelper.NAME,
-                    DBHelper.SCORE,
-            };
-
             if(result.getCount() > 0) {
                 ScoreCursorAdaptor adapter = new ScoreCursorAdaptor(HighScoresActivity.this, result);
 
@@ -91,9 +83,9 @@ public class HighScoresActivity extends AppCompatActivity {
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             // Find fields to populate in inflated template
-            TextView rankView = (TextView) view.findViewById(R.id.rank_textview);
-            TextView nameView = (TextView) view.findViewById(R.id.name_textview);
-            TextView scoreView = (TextView) view.findViewById(R.id.score_textview);
+            TextView rankView = view.findViewById(R.id.rank_textview);
+            TextView nameView = view.findViewById(R.id.name_textview);
+            TextView scoreView = view.findViewById(R.id.score_textview);
 
             // Extract properties from cursor
             int rank = cursor.getPosition() + 1;
@@ -106,6 +98,5 @@ public class HighScoresActivity extends AppCompatActivity {
             scoreView.setText(String.valueOf(score));
         }
     }
-
 
 }

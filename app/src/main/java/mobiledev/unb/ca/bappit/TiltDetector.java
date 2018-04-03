@@ -16,7 +16,6 @@ public class TiltDetector implements SensorEventListener {
      *  many G's it takes to register a shake
      */
 
-    public float TILT_THRESHOLD_SPEED = 0.5f;
     private static final int TILT_SLOP_TIME_MS = 1000;
 
     private OnTiltListener mListener;
@@ -27,7 +26,7 @@ public class TiltDetector implements SensorEventListener {
     }
 
     public interface OnTiltListener {
-        public void onTilt(float tilt);
+        void onTilt(float tilt);
     }
 
     @Override
@@ -37,7 +36,6 @@ public class TiltDetector implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-//        Log.i("debug", "hello");
         if (mListener != null) {
             float y = event.values[1];
 

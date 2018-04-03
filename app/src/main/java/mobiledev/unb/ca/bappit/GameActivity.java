@@ -30,30 +30,19 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
-    private static final String DEBUG_TAG = "debug";
-
     private View gameView;
     private int score;
 
     private Button quitButton;
     private TextView scoreText;
     private ImageView currentGestureImage;
-//    private TextView currentGestureText;
     private ImageView checkMarkImage;
 
-    private final static int[] gestures = new int[] {R.mipmap.fling_it, R.mipmap.bappit, R.mipmap.shake_it, R.mipmap.twist_it, R.mipmap.zoom_it};
-
-    private final static int FLING = 0;
-    private final static int BAPP = 1;
-    private final static int SHAKE = 2;
-    private final static int TWIST = 3;
-    private final static int ZOOM = 4;
-    private final static int NUM_GESTURES = 5;
     private final int initialGestureTime = 3000;
     private float deltaPlayRate;
 
     private int timeForGesture;
-    private int currentGesture;
+    private Gesture currentGesture;
     private boolean gestureComplete;
     private CountDownTimer gestureTimer;
     private ProgressBar timerProgressBar;
@@ -61,19 +50,15 @@ public class GameActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
+    private Sensor mGyroscope;
+    private GestureDetectorCompat mDetector;
     private ShakeDetector mShakeDetector;
+    private TiltDetector mTiltDetector;
+    private ScaleGestureDetector mScaleDetector;
 
-    private Random rand;
+    private static Random rand;
 
     private boolean isVibrate;
-
-    private Sensor mGyroscope;
-    private TiltDetector mTiltDetector;
-
-
-
-    private GestureDetectorCompat mDetector;
-    private ScaleGestureDetector mScaleDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,37 +82,32 @@ public class GameActivity extends AppCompatActivity {
 
         // ShakeDetector initialization
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
             @Override
             public void onShake(int count) {
-                Log.d(DEBUG_TAG, "onShake: " + count);
-                checkGesture(SHAKE);
+                checkGesture(Gesture.SHAKE);
             }
         });
 
-        //Tilt Detector
+        //Tilt Detector initialization
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mTiltDetector = new TiltDetector();
         mTiltDetector.setOnTiltListener(new TiltDetector.OnTiltListener() {
             @Override
             public void onTilt(float tilt) {
-                Log.d(DEBUG_TAG, "onTilt" + tilt);
-                checkGesture(TWIST);
+                checkGesture(Gesture.TWIST);
             }
         });
 
         scoreText = (TextView) findViewById(R.id.score_txt);
         currentGestureImage = (ImageView) (findViewById(R.id.current_gesture_img));
-//        currentGestureText = (TextView) (findViewById(R.id.current_gesture_txt));
         timerProgressBar = (ProgressBar) findViewById(R.id.timeProgressBar);
         checkMarkImage = (ImageView) findViewById(R.id.check_mark_img);
 
         scoreText.setVisibility(View.GONE);
         quitButton.setVisibility(View.GONE);
-//        currentGestureText.setVisibility(View.GONE);
         currentGestureImage.setVisibility(View.GONE);
         timerProgressBar.setVisibility(View.GONE);
         checkMarkImage.setVisibility(View.GONE);
@@ -136,7 +116,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void startGame() {
-        Log.i("debug", "Starting game");
         score = 0;
         deltaPlayRate = 0.015f;
 
@@ -182,7 +161,6 @@ public class GameActivity extends AppCompatActivity {
             }}
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event){
         this.mScaleDetector.onTouchEvent(event);
@@ -190,35 +168,7 @@ public class GameActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        private static final String DEBUG_TAG = "Gestures";
-
-        @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
-                               float velocityX, float velocityY) {
-            if (currentGesture != ZOOM) {
-                checkGesture(FLING);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            checkGesture(BAPP);
-            return true;
-        }
-
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-        @Override
-        public void onScaleEnd(ScaleGestureDetector detector) {
-            checkGesture(ZOOM);
-        }
-    }
-
-    private void checkGesture(int gesture) {
+    private void checkGesture(Gesture gesture) {
         if(currentGesture == gesture && !gestureComplete) {
             increaseScore();
             gestureComplete = true;
@@ -238,8 +188,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void changeGesture() {
-        //Generate new random gesture
-        currentGesture = rand.nextInt(NUM_GESTURES);
+        currentGesture = Gesture.getRandomGesture();
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture
@@ -247,12 +196,11 @@ public class GameActivity extends AppCompatActivity {
             sounds.playSound(currentGesture, false);
 
         //Update UI elements
-        currentGestureImage.setImageResource(gestures[currentGesture]);
+        currentGestureImage.setImageResource(currentGesture.getGestureImageId());
         RunTextAnimation();
         timerProgressBar.setVisibility(View.VISIBLE);
         currentGestureImage.setVisibility(View.VISIBLE);
         checkMarkImage.setVisibility(View.GONE);
-
 
         //Set new time limit
         timeForGesture -= initialGestureTime * deltaPlayRate;
@@ -287,9 +235,8 @@ public class GameActivity extends AppCompatActivity {
     {
         Animation a = AnimationUtils.loadAnimation(this, R.anim.scale_text);
         a.reset();
-        TextView tv = (TextView) findViewById(R.id.current_gesture_txt);
-        tv.clearAnimation();
-        tv.startAnimation(a);
+        currentGestureImage.clearAnimation();
+        currentGestureImage.startAnimation(a);
     }
 
     private void hideSystemUI() {
@@ -320,7 +267,33 @@ public class GameActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY) {
+            if (currentGesture != Gesture.ZOOM) {
+                checkGesture(Gesture.FLING);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            checkGesture(Gesture.BAPP);
+            return true;
+        }
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            checkGesture(Gesture.ZOOM);
+        }
+    }
+
     private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};
+
     private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
         @Override
         protected MusicState doInBackground(Void... params) {
@@ -356,6 +329,32 @@ public class GameActivity extends AppCompatActivity {
             else if (state == MusicState.STILL_LOADING) {
                 loadResources();
             }
+        }
+    }
+
+    public enum Gesture {
+        FLING (R.mipmap.fling_it),
+        BAPP (R.mipmap.bappit),
+        SHAKE (R.mipmap.shake_it),
+        TWIST (R.mipmap.twist_it),
+        ZOOM (R.mipmap.zoom_it);
+
+        private int gestureImageId;
+
+        Gesture (int imageId) {
+            this.gestureImageId = imageId;
+        }
+
+        public int getGestureImageId() {
+            return gestureImageId;
+        }
+
+        public static int numGestures() {
+            return values().length;
+        }
+
+        public static Gesture getRandomGesture() {
+            return values()[rand.nextInt(Gesture.numGestures())];
         }
     }
 }

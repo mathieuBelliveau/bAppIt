@@ -26,11 +26,6 @@ public class SettingsActivity extends AppCompatActivity {
     protected final static String VIBRATE = "VIBRATE";
     protected final static String PREFS = "SettingsPrefs";
 
-    private TextView saveButton;
-    //TODO - Vibration toggle
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +46,6 @@ public class SettingsActivity extends AppCompatActivity {
         effectsBar.setProgress(prefs.getInt(FX, 75)); //50 is the default value.
         voiceBar.setProgress(prefs.getInt(VOICE, 75)); //50 is the default value.
         vibeToggle.setChecked(prefs.getBoolean(VIBRATE,true)); //True is the default value.
-
 
     }
 

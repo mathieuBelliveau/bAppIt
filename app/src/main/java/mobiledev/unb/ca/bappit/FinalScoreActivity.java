@@ -23,7 +23,6 @@ public class FinalScoreActivity extends AppCompatActivity {
 
     public static final String FINAL_SCORE = "score";
 
-    private TextView displayScoreText;
     private Button replayBtn;
     private Button mainMenuBtn;
     private Button saveScoreBtn;
@@ -45,7 +44,7 @@ public class FinalScoreActivity extends AppCompatActivity {
 
         finalScore = getIntent().getIntExtra(FINAL_SCORE, 0);
 
-        displayScoreText = (TextView) findViewById(R.id.score_display_txt);
+        TextView displayScoreText = (TextView) findViewById(R.id.score_display_txt);
         displayScoreText.setText(String.valueOf(finalScore));
 
         highScoreText = (TextView) findViewById(R.id.highScoreText);
