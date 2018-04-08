@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -183,8 +184,24 @@ public class GameActivity extends AppCompatActivity {
         }
         else {
             gestureTimer.cancel();
+            if(gestureComplete)//TODO
+                gestureHint();
+
+            String mismatchMessage = "";//TODO Get a better message
+            if(gesture == Gesture.SHAKE)
+                mismatchMessage = "Oops! You shook it!";
+            else
+                mismatchMessage = "Oops! You " + gesture.toString().toLowerCase() + "ed it!";
+            Toast.makeText(this, mismatchMessage,
+                    Toast.LENGTH_SHORT).show();
             gameOver();
         }
+    }
+    /*TODO a method that will display a popup window
+    This popup tell the user to stop during the grace period*/
+    private void gestureHint()
+    {
+
     }
 
     private void changeGesture() {
