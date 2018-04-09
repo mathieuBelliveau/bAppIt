@@ -4,6 +4,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -16,7 +17,7 @@ import java.util.Random;
 
 abstract class GestureManager{
     private static Random rand;
-    private Context currContext;
+    private Context currActivity;
 
     private Gesture currentGesture;
     private boolean gestureComplete;
@@ -30,16 +31,16 @@ abstract class GestureManager{
     private ScaleGestureDetector mScaleDetector;
 
     //assuming the context is an activity extending AppCompatActivity
-    public GestureManager(Context context)
+    public GestureManager(AppCompatActivity activity)
     {
-        currContext = context;
+        currActivity = activity;
 
         /* initializations*/
-        mDetector = new GestureDetectorCompat(currContext, new MyGestureListener());
-        mScaleDetector = new ScaleGestureDetector(currContext, new ScaleListener());
+        mDetector = new GestureDetectorCompat(currActivity, new MyGestureListener());
+        mScaleDetector = new ScaleGestureDetector(currActivity, new ScaleListener());
 
         // ShakeDetector initialization
-        mSensorManager = (SensorManager) currContext.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) currActivity.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
@@ -58,7 +59,7 @@ abstract class GestureManager{
                 checkGesture(Gesture.TWIST);
             }
         });
-    }
+        }
 
     abstract void checkGesture(Gesture gesture);
 
@@ -91,32 +92,6 @@ abstract class GestureManager{
         @Override
         public void onScaleEnd(ScaleGestureDetector detector) {
             checkGesture(Gesture.ZOOM);
-        }
-    }
-
-    public enum Gesture {
-        FLING (R.mipmap.fling_it),
-        BAPP (R.mipmap.bappit),
-        SHAKE (R.mipmap.shake_it),
-        TWIST (R.mipmap.twist_it),
-        ZOOM (R.mipmap.zoom_it);
-
-        private int gestureImageId;
-
-        Gesture (int imageId) {
-            this.gestureImageId = imageId;
-        }
-
-        public int getGestureImageId() {
-            return gestureImageId;
-        }
-
-        public static int numGestures() {
-            return values().length;
-        }
-
-        public static Gesture getRandomGesture() {
-            return values()[rand.nextInt(Gesture.numGestures())];
         }
     }
 }
