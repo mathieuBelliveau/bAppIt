@@ -14,7 +14,6 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -151,6 +150,7 @@ public class GameActivity extends AppCompatActivity {
         startActivity(finishIntent);
     }
 
+    //FIXME Figure out better vibration patterns
     private void vibrate()
     {
         if(isVibrate){
@@ -184,21 +184,27 @@ public class GameActivity extends AppCompatActivity {
         }
         else {
             gestureTimer.cancel();
-            if(gestureComplete)//TODO
+            if(gestureComplete)
                 gestureHint();
 
-            String mismatchMessage = "";//TODO Get a better message
-            if(gesture == Gesture.SHAKE)
-                mismatchMessage = "Oops! You shook it!";
-            else
-                mismatchMessage = "Oops! You " + gesture.toString().toLowerCase() + "ed it!";
-            Toast.makeText(this, mismatchMessage,
-                    Toast.LENGTH_SHORT).show();
+            correctionMessage(gesture);
             gameOver();
         }
     }
+
+    private void correctionMessage(Gesture gesture){
+        String mismatchMessage = "";//TODO Get a better message
+        if(gesture == Gesture.SHAKE)
+            mismatchMessage = "Oops! You shook it!";
+        else
+            mismatchMessage = "Oops! You " + gesture.toString().toLowerCase() + "ed it!";
+        Toast.makeText(this, mismatchMessage,
+                Toast.LENGTH_SHORT).show();
+    }
+
     /*TODO a method that will display a popup window
-    This popup tell the user to stop during the grace period*/
+    This popup tell the user to stop during the grace period
+    Have some friendly reminders with little drawings.*/
     private void gestureHint()
     {
 
