@@ -128,8 +128,7 @@ public class GameActivity extends AppCompatActivity {
         scoreText.setVisibility(View.VISIBLE);
         quitButton.setVisibility(View.VISIBLE);
 
-        introCycle();
-        //randomGesture();
+        completeGesture();
     }
 
     private void loadResources()
@@ -211,23 +210,15 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    private void  introCycle()
-    {
-        for (Gesture gesture : Gesture.values())
-        {
-            currentGesture = gesture;
-            completeGesture();
-            break;
-        }
-    }
-
-    private void randomGesture() {
-        currentGesture = Gesture.getRandomGesture();
-        completeGesture();
-    }
-
     private void completeGesture()
     {
+        if(score < 5)//Cycle intro values
+        {
+            currentGesture = Gesture.values()[score];
+        }
+        else{//random
+            currentGesture = Gesture.getRandomGesture();
+        }
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture
@@ -254,16 +245,15 @@ public class GameActivity extends AppCompatActivity {
 
         gestureTimer = new CountDownTimer(timeForGesture, 50) {
             public void onTick(long millisUntilFinished) {
-                if(!gestureComplete) {
-                    timerProgressBar.setProgress((int)millisUntilFinished);
+                if (!gestureComplete) {
+                    timerProgressBar.setProgress((int) millisUntilFinished);
                 }
             }
 
             public void onFinish() {
-                if(gestureComplete) {
-                    randomGesture();
-                }
-                else{
+                if (gestureComplete) {
+                    completeGesture();
+                } else {
                     gameOver();
                 }
             }
