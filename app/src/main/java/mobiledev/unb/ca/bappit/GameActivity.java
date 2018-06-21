@@ -14,7 +14,6 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -25,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -128,7 +128,7 @@ public class GameActivity extends AppCompatActivity {
         scoreText.setVisibility(View.VISIBLE);
         quitButton.setVisibility(View.VISIBLE);
 
-        changeGesture();
+        completeGesture();
     }
 
     private void loadResources()
@@ -150,6 +150,7 @@ public class GameActivity extends AppCompatActivity {
         startActivity(finishIntent);
     }
 
+    //FIXME Figure out better vibration patterns
     private void vibrate()
     {
         if(isVibrate){
@@ -183,12 +184,41 @@ public class GameActivity extends AppCompatActivity {
         }
         else {
             gestureTimer.cancel();
+            if(gestureComplete)
+                gestureHint();
+
+            correctionMessage(gesture);
             gameOver();
         }
     }
 
-    private void changeGesture() {
-        currentGesture = Gesture.getRandomGesture();
+    private void correctionMessage(Gesture gesture){
+        String mismatchMessage = "";//TODO Get a better message
+        if(gesture == Gesture.SHAKE)
+            mismatchMessage = "Oops! You shook it!";
+        else
+            mismatchMessage = "Oops! You " + gesture.toString().toLowerCase() + "ed it!";
+        Toast.makeText(this, mismatchMessage,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    /*TODO a method that will display a popup window
+    This popup tell the user to stop during the grace period
+    Have some friendly reminders with little drawings.*/
+    private void gestureHint()
+    {
+
+    }
+
+    private void completeGesture()
+    {
+        if(score < 5)//Cycle intro values
+        {
+            currentGesture = Gesture.values()[score];
+        }
+        else{//random
+            currentGesture = Gesture.getRandomGesture();
+        }
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture
@@ -215,16 +245,15 @@ public class GameActivity extends AppCompatActivity {
 
         gestureTimer = new CountDownTimer(timeForGesture, 50) {
             public void onTick(long millisUntilFinished) {
-                if(!gestureComplete) {
-                    timerProgressBar.setProgress((int)millisUntilFinished);
+                if (!gestureComplete) {
+                    timerProgressBar.setProgress((int) millisUntilFinished);
                 }
             }
 
             public void onFinish() {
-                if(gestureComplete) {
-                    changeGesture();
-                }
-                else{
+                if (gestureComplete) {
+                    completeGesture();
+                } else {
                     gameOver();
                 }
             }
@@ -333,8 +362,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public enum Gesture {
-        FLING (R.mipmap.fling_it),
         BAPP (R.mipmap.bappit),
+        FLING (R.mipmap.fling_it),
         SHAKE (R.mipmap.shake_it),
         TWIST (R.mipmap.twist_it),
         ZOOM (R.mipmap.zoom_it);
