@@ -7,8 +7,8 @@ package mobiledev.unb.ca.bappit;
 import java.util.Random;
 
 public enum Gesture {//TODO Does this need to be in an interface or abtract class?
-    FLING (R.mipmap.fling_it),
     BAPP (R.mipmap.bappit),
+    FLING (R.mipmap.fling_it),
     SHAKE (R.mipmap.shake_it),
     TWIST (R.mipmap.twist_it),
     ZOOM (R.mipmap.zoom_it);

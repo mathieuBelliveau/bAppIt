@@ -79,18 +79,18 @@ public class Sounds {
 
     }
 
-    public void playSound(GameActivity.Gesture gesture, boolean isSoundEffect) {
+    public void playSound(Gesture gesture, boolean isSoundEffect) {
         if (loaded) {
             int sID = 0;
-            if(gesture == GameActivity.Gesture.FLING)
+            if(gesture == Gesture.FLING)
                 sID = 0;
-            else if (gesture == GameActivity.Gesture.BAPP)
+            else if (gesture == Gesture.BAPP)
                 sID = 1;
-            else if (gesture == GameActivity.Gesture.SHAKE)
+            else if (gesture == Gesture.SHAKE)
                 sID = 2;
-            else if (gesture == GameActivity.Gesture.TWIST)
+            else if (gesture == Gesture.TWIST)
                 sID = 3;
-            else if (gesture == GameActivity.Gesture.ZOOM)
+            else if (gesture == Gesture.ZOOM)
                 sID = 4;
 
             if(isSoundEffect)
