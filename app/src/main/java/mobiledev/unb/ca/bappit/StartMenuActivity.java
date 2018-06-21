@@ -51,7 +51,7 @@ public class StartMenuActivity extends AppCompatActivity {
         tutorialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StartMenuActivity.this, TutorialActivity.class);
+                Intent intent = new Intent(StartMenuActivity.this, TutorialMenuActivity.class);
                 startActivity(intent);
             }
         });

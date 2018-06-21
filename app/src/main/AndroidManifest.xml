@@ -36,9 +36,9 @@
         <activity
             android:name=".HighScoresActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".TutorialActivity"
+        <activity android:name=".TutorialMenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".TutorialVideo"
+        <activity android:name=".TutorialVideoActivity"
             android:screenOrientation="portrait"/>
     </application>
 
