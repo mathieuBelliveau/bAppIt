@@ -128,7 +128,8 @@ public class GameActivity extends AppCompatActivity {
         scoreText.setVisibility(View.VISIBLE);
         quitButton.setVisibility(View.VISIBLE);
 
-        changeGesture();
+        introCycle();
+        //randomGesture();
     }
 
     private void loadResources()
@@ -210,8 +211,23 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-    private void changeGesture() {
+    private void  introCycle()
+    {
+        for (Gesture gesture : Gesture.values())
+        {
+            currentGesture = gesture;
+            completeGesture();
+            break;
+        }
+    }
+
+    private void randomGesture() {
         currentGesture = Gesture.getRandomGesture();
+        completeGesture();
+    }
+
+    private void completeGesture()
+    {
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture
@@ -245,7 +261,7 @@ public class GameActivity extends AppCompatActivity {
 
             public void onFinish() {
                 if(gestureComplete) {
-                    changeGesture();
+                    randomGesture();
                 }
                 else{
                     gameOver();
@@ -356,8 +372,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public enum Gesture {
-        FLING (R.mipmap.fling_it),
         BAPP (R.mipmap.bappit),
+        FLING (R.mipmap.fling_it),
         SHAKE (R.mipmap.shake_it),
         TWIST (R.mipmap.twist_it),
         ZOOM (R.mipmap.zoom_it);
