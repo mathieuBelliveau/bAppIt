@@ -3,6 +3,7 @@ package mobiledev.unb.ca.bappit;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -15,10 +16,10 @@ import java.util.Random;
  * Created by Mathieu on 4/7/2018.
  */
 
-public class GestureManager{
+public abstract class GestureCompatActivity extends AppCompatActivity{
 
     private Gesture currentGesture;
-    private AppCompatActivity context;
+//    private AppCompatActivity context;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -30,19 +31,33 @@ public class GestureManager{
 
     private static Random rand;
 
-//    abstract void shakeDetectorInit();
-//    abstract void tiltDetectorInit();
-//    abstract void checkGesture(Gesture gesture);
-//
 //    //FIXME is this proper?
 //    abstract class MyGestureListener extends GestureDetector.SimpleOnGestureListener{};
 //    abstract class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {};
 
-    public GestureManager (AppCompatActivity context)
+//    public GestureCompatActivity (AppCompatActivity context)
+//    {
+//        this.context = context;
+//        mDetector = new GestureDetectorCompat(context, new MyGestureListener());
+//        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+//        rand = new Random();
+//
+//
+//        initShakeDetect();
+//        initTiltDetect();
+//    }
+
+    abstract void gestureSuccess(Gesture gesture);
+    abstract void gestureFailure(Gesture gesture);
+    abstract void checkGesture(Gesture gesture);
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
     {
-        this.context = context;
-        mDetector = new GestureDetectorCompat(context, new MyGestureListener());
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+        super.onCreate(savedInstanceState);
+
+        mDetector = new GestureDetectorCompat(this, new MyGestureListener());//FIXME - may need to use getCurrentContext(), or whatever
+        mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
         rand = new Random();
 
 
@@ -86,7 +101,7 @@ public class GestureManager{
     private void initShakeDetect()
     {
         // ShakeDetector initialization
-        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {

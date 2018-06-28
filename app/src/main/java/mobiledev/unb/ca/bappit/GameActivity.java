@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends GestureCompatActivity {
 
     private View gameView;
     private int score;
@@ -48,7 +48,7 @@ public class GameActivity extends AppCompatActivity {
     private ProgressBar timerProgressBar;
     private Sounds sounds;
 
-    private GestureManager mGestureManager;
+//    private GestureCompatActivity mGestureManager;
 
 //    private SensorManager mSensorManager;
 //    private GestureManager mGestureManager;
@@ -70,7 +70,6 @@ public class GameActivity extends AppCompatActivity {
         gameView = getWindow().getDecorView();
         hideSystemUI();
 
-        mGestureManager = new GestureManager(this);
 //        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
 //        mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
 //        rand = new Random();
@@ -168,33 +167,57 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event){
-        mGestureManager.setTouchEvent(event);
+        setTouchEvent(event);
 //        this.mScaleDetector.onTouchEvent(event);
 //        this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
+    public void gestureSuccess(Gesture gesture)
+    {
+        increaseScore();
+        gestureComplete = true;
+
+        timerProgressBar.setVisibility(View.INVISIBLE);
+        //currentGestureText.setVisibility(View.GONE);
+        currentGestureImage.setVisibility(View.GONE);
+        checkMarkImage.setVisibility(View.VISIBLE);
+
+        //Play sound effect for correct gesture
+        sounds.playSound(gesture, true);
+    }
+
+    public void gestureFailure(Gesture gesture)
+    {
+        gestureTimer.cancel();
+        if(gestureComplete)
+            gestureHint();
+
+        correctionMessage(gesture);
+        gameOver();
+    }
+
     public void checkGesture(Gesture gesture) {
-        Gesture currentGesture = mGestureManager.getCurrentGesture();
-        if(currentGesture == gesture && !gestureComplete) {
-            increaseScore();
-            gestureComplete = true;
-
-            timerProgressBar.setVisibility(View.INVISIBLE);
-            //currentGestureText.setVisibility(View.GONE);
-            currentGestureImage.setVisibility(View.GONE);
-            checkMarkImage.setVisibility(View.VISIBLE);
-
-            //Play sound effect for correct gesture
-            sounds.playSound(currentGesture, true);
+//        Gesture currentGesture = mGestureManager.getCurrentGesture();
+        if(getCurrentGesture() == gesture && !gestureComplete) {
+//            increaseScore();
+//            gestureComplete = true;
+//
+//            timerProgressBar.setVisibility(View.INVISIBLE);
+//            //currentGestureText.setVisibility(View.GONE);
+//            currentGestureImage.setVisibility(View.GONE);
+//            checkMarkImage.setVisibility(View.VISIBLE);
+//
+//            //Play sound effect for correct gesture
+//            sounds.playSound(currentGesture, true);
         }
         else {
-            gestureTimer.cancel();
-            if(gestureComplete)
-                gestureHint();
-
-            correctionMessage(gesture);
-            gameOver();
+//            gestureTimer.cancel();
+//            if(gestureComplete)
+//                gestureHint();
+//
+//            correctionMessage(gesture);
+//            gameOver();
         }
     }
 
@@ -220,12 +243,12 @@ public class GameActivity extends AppCompatActivity {
     {
         if(score < 5)//Cycle intro values
         {
-            mGestureManager.setCurrentGesture(Gesture.values()[score]);
+            setCurrentGesture(Gesture.values()[score]);
         }
         else{//random
-            mGestureManager.setCurrentGesture(Gesture.getRandomGesture());
+            setCurrentGesture(Gesture.getRandomGesture());
         }
-        Gesture currentGesture = mGestureManager.getCurrentGesture();
+        Gesture currentGesture = getCurrentGesture();
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture
@@ -289,7 +312,7 @@ public class GameActivity extends AppCompatActivity {
     public void onResume() {
         loadResources();
         super.onResume();
-        mGestureManager.registerListeners();
+        registerListeners();
 //        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
 //        mSensorManager.registerListener(mTiltDetector, mGyroscope, SensorManager.SENSOR_DELAY_GAME);
     }
@@ -297,7 +320,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
-        mGestureManager.unregisterListeners();
+        unregisterListeners();
 //        mSensorManager.unregisterListener(mShakeDetector);
 //        mSensorManager.unregisterListener(mTiltDetector);
         sounds.stopAllMusic();
