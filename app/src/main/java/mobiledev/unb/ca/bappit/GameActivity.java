@@ -174,7 +174,7 @@ public class GameActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 
-    private void checkGesture(Gesture gesture) {
+    public void checkGesture(Gesture gesture) {
         Gesture currentGesture = mGestureManager.getCurrentGesture();
         if(currentGesture == gesture && !gestureComplete) {
             increaseScore();
