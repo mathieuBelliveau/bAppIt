@@ -199,7 +199,8 @@ public class GameActivity extends GestureCompatActivity {
 
     public void checkGesture(Gesture gesture) {
 //        Gesture currentGesture = mGestureManager.getCurrentGesture();
-        if(getCurrentGesture() == gesture && !gestureComplete) {
+        if(getCurrentGesture() == gesture && !gestureComplete) {//TODO Does gestureComplete go here, or in the Parent?
+            gestureSuccess(gesture);
 //            increaseScore();
 //            gestureComplete = true;
 //
@@ -212,6 +213,7 @@ public class GameActivity extends GestureCompatActivity {
 //            sounds.playSound(currentGesture, true);
         }
         else {
+            gestureFailure(gesture);
 //            gestureTimer.cancel();
 //            if(gestureComplete)
 //                gestureHint();

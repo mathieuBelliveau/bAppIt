@@ -30,6 +30,7 @@ public enum Gesture {//TODO Does this need to be in an interface or abtract clas
     }
 
     public static Gesture getRandomGesture() {
-        return values()[rand.nextInt(Gesture.numGestures())];
+        int random = rand.nextInt(5/*Gesture.numGestures()*/);
+        return values()[random/*rand.nextInt(5*//*Gesture.numGestures()*//*)*/];
     }
 }
