@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import mobiledev.unb.ca.bappit.GestureCompatActivity.Gesture;
 import android.os.Debug;
 import android.util.Log;
 
@@ -79,18 +80,18 @@ public class Sounds {
 
     }
 
-    public void playSound(GestureCompatActivity.Gesture gesture, boolean isSoundEffect) {
+    public void playSound(Gesture gesture, boolean isSoundEffect) {
         if (loaded) {
             int sID = 0;
-            if(gesture == GestureCompatActivity.Gesture.FLING)
+            if(gesture == Gesture.FLING)
                 sID = 0;
-            else if (gesture == GestureCompatActivity.Gesture.BAPP)
+            else if (gesture == Gesture.BAPP)
                 sID = 1;
-            else if (gesture == GestureCompatActivity.Gesture.SHAKE)
+            else if (gesture == Gesture.SHAKE)
                 sID = 2;
-            else if (gesture == GestureCompatActivity.Gesture.TWIST)
+            else if (gesture == Gesture.TWIST)
                 sID = 3;
-            else if (gesture == GestureCompatActivity.Gesture.ZOOM)
+            else if (gesture == Gesture.ZOOM)
                 sID = 4;
 
             if(isSoundEffect)

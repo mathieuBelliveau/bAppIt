@@ -33,7 +33,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     abstract void gestureSuccess(Gesture gesture);
     abstract void gestureFailure(Gesture gesture);
-    abstract void checkGesture(Gesture gesture);
+//    abstract void checkGesture(Gesture gesture);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,6 +65,15 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
     {
         this.mScaleDetector.onTouchEvent(event);
         this.mDetector.onTouchEvent(event);
+    }
+
+    public void checkGesture(Gesture gesture) {
+        if(getCurrentGesture() == gesture && !gestureComplete) {
+            gestureSuccess(gesture);
+        }
+        else {
+            gestureFailure(gesture);
+        }
     }
 
     public boolean isGestureComplete() {

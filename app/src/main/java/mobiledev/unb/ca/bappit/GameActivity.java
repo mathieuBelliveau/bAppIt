@@ -149,14 +149,14 @@ public class GameActivity extends GestureCompatActivity {
         gameOver();
     }
 
-    public void checkGesture(Gesture gesture) {
-        if(getCurrentGesture() == gesture && !isGestureComplete()) {//TODO Does gestureComplete go here, or in the Parent?
-            gestureSuccess(gesture);
-        }
-        else {
-            gestureFailure(gesture);
-        }
-    }
+//    public void checkGesture(Gesture gesture) {
+//        if(getCurrentGesture() == gesture && !isGestureComplete()) {//TODO Does gestureComplete go here, or in the Parent?
+//            gestureSuccess(gesture);
+//        }
+//        else {
+//            gestureFailure(gesture);
+//        }
+//    }
 
     private void correctionMessage(Gesture gesture){
         String mismatchMessage = "";//TODO Get a better message
@@ -185,7 +185,7 @@ public class GameActivity extends GestureCompatActivity {
         else{//random
             setCurrentGesture(Gesture.getRandomGesture());
         }
-        GestureCompatActivity.Gesture currentGesture = getCurrentGesture();
+        Gesture currentGesture = getCurrentGesture();
         setGestureComplete(false);
 
         //Play announcer sound clip for correct gesture
