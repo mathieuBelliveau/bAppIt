@@ -19,7 +19,7 @@ import java.util.Random;
 public abstract class GestureCompatActivity extends AppCompatActivity{
 
     private Gesture currentGesture;
-//    private AppCompatActivity context;
+    private boolean gestureComplete;
 
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
@@ -30,22 +30,6 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
     private static ScaleGestureDetector mScaleDetector;
 
     private static Random rand;
-
-//    //FIXME is this proper?
-//    abstract class MyGestureListener extends GestureDetector.SimpleOnGestureListener{};
-//    abstract class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {};
-
-//    public GestureCompatActivity (AppCompatActivity context)
-//    {
-//        this.context = context;
-//        mDetector = new GestureDetectorCompat(context, new MyGestureListener());
-//        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-//        rand = new Random();
-//
-//
-//        initShakeDetect();
-//        initTiltDetect();
-//    }
 
     abstract void gestureSuccess(Gesture gesture);
     abstract void gestureFailure(Gesture gesture);
@@ -81,6 +65,14 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
     {
         this.mScaleDetector.onTouchEvent(event);
         this.mDetector.onTouchEvent(event);
+    }
+
+    public boolean isGestureComplete() {
+        return gestureComplete;
+    }
+
+    public void setGestureComplete(boolean gestureComplete) {
+        this.gestureComplete = gestureComplete;
     }
 
     public Gesture getCurrentGesture() {

@@ -42,24 +42,9 @@ public class GameActivity extends GestureCompatActivity {
     private float deltaPlayRate;
 
     private int timeForGesture;
-    //private Gesture currentGesture;
-    private boolean gestureComplete;
     private CountDownTimer gestureTimer;
     private ProgressBar timerProgressBar;
     private Sounds sounds;
-
-//    private GestureCompatActivity mGestureManager;
-
-//    private SensorManager mSensorManager;
-//    private GestureManager mGestureManager;
-//    private Sensor mAccelerometer;
-//    private Sensor mGyroscope;
-//    private GestureDetectorCompat mDetector;
-//    private ShakeDetector mShakeDetector;
-//    private TiltDetector mTiltDetector;
-//    private ScaleGestureDetector mScaleDetector;
-
-    //private static Random rand;
 
     private boolean isVibrate;
 
@@ -70,10 +55,6 @@ public class GameActivity extends GestureCompatActivity {
         gameView = getWindow().getDecorView();
         hideSystemUI();
 
-//        mDetector = new GestureDetectorCompat(this, new MyGestureListener());
-//        mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
-//        rand = new Random();
-
         quitButton = (Button) (findViewById(R.id.quit_btn));
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,27 +63,6 @@ public class GameActivity extends GestureCompatActivity {
                 gameOver();
             }
         });
-
-//        // ShakeDetector initialization
-//        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        mShakeDetector = new ShakeDetector();
-//        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
-//            @Override
-//            public void onShake(int count) {
-//                checkGesture(Gesture.SHAKE);
-//            }
-//        });
-
-//        //Tilt Detector initialization
-//        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-//        mTiltDetector = new TiltDetector();
-//        mTiltDetector.setOnTiltListener(new TiltDetector.OnTiltListener() {
-//            @Override
-//            public void onTilt(float tilt) {
-//                checkGesture(Gesture.TWIST);
-//            }
-//        });
 
         scoreText = (TextView) findViewById(R.id.score_txt);
         currentGestureImage = (ImageView) (findViewById(R.id.current_gesture_img));
@@ -168,15 +128,13 @@ public class GameActivity extends GestureCompatActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event){
         setTouchEvent(event);
-//        this.mScaleDetector.onTouchEvent(event);
-//        this.mDetector.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 
     public void gestureSuccess(Gesture gesture)
     {
         increaseScore();
-        gestureComplete = true;
+        setGestureComplete(true);
 
         timerProgressBar.setVisibility(View.INVISIBLE);
         //currentGestureText.setVisibility(View.GONE);
@@ -190,7 +148,7 @@ public class GameActivity extends GestureCompatActivity {
     public void gestureFailure(Gesture gesture)
     {
         gestureTimer.cancel();
-        if(gestureComplete)
+        if(isGestureComplete())
             gestureHint();
 
         correctionMessage(gesture);
@@ -198,28 +156,11 @@ public class GameActivity extends GestureCompatActivity {
     }
 
     public void checkGesture(Gesture gesture) {
-//        Gesture currentGesture = mGestureManager.getCurrentGesture();
-        if(getCurrentGesture() == gesture && !gestureComplete) {//TODO Does gestureComplete go here, or in the Parent?
+        if(getCurrentGesture() == gesture && !isGestureComplete()) {//TODO Does gestureComplete go here, or in the Parent?
             gestureSuccess(gesture);
-//            increaseScore();
-//            gestureComplete = true;
-//
-//            timerProgressBar.setVisibility(View.INVISIBLE);
-//            //currentGestureText.setVisibility(View.GONE);
-//            currentGestureImage.setVisibility(View.GONE);
-//            checkMarkImage.setVisibility(View.VISIBLE);
-//
-//            //Play sound effect for correct gesture
-//            sounds.playSound(currentGesture, true);
         }
         else {
             gestureFailure(gesture);
-//            gestureTimer.cancel();
-//            if(gestureComplete)
-//                gestureHint();
-//
-//            correctionMessage(gesture);
-//            gameOver();
         }
     }
 
@@ -251,7 +192,7 @@ public class GameActivity extends GestureCompatActivity {
             setCurrentGesture(Gesture.getRandomGesture());
         }
         GestureCompatActivity.Gesture currentGesture = getCurrentGesture();
-        gestureComplete = false;
+        setGestureComplete(false);
 
         //Play announcer sound clip for correct gesture
         if(sounds != null)
@@ -277,13 +218,13 @@ public class GameActivity extends GestureCompatActivity {
 
         gestureTimer = new CountDownTimer(timeForGesture, 50) {
             public void onTick(long millisUntilFinished) {
-                if (!gestureComplete) {
+                if (!isGestureComplete()) {
                     timerProgressBar.setProgress((int) millisUntilFinished);
                 }
             }
 
             public void onFinish() {
-                if (gestureComplete) {
+                if (isGestureComplete()) {
                     completeGesture();
                 } else {
                     gameOver();
@@ -315,45 +256,16 @@ public class GameActivity extends GestureCompatActivity {
         loadResources();
         super.onResume();
         registerListeners();
-//        mSensorManager.registerListener(mShakeDetector, mAccelerometer,	SensorManager.SENSOR_DELAY_UI);
-//        mSensorManager.registerListener(mTiltDetector, mGyroscope, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
     public void onPause() {
         // Add the following line to unregister the Sensor Manager onPause
         unregisterListeners();
-//        mSensorManager.unregisterListener(mShakeDetector);
-//        mSensorManager.unregisterListener(mTiltDetector);
         sounds.stopAllMusic();
         gestureTimer.cancel();
         super.onPause();
     }
-
-//    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-//        @Override
-//        public boolean onFling(MotionEvent event1, MotionEvent event2,
-//                               float velocityX, float velocityY) {
-//            if (currentGesture != Gesture.ZOOM) {
-//                checkGesture(Gesture.FLING);
-//                return true;
-//            }
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean onSingleTapUp(MotionEvent e) {
-//            checkGesture(Gesture.BAPP);
-//            return true;
-//        }
-//    }
-
-//    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
-//        @Override
-//        public void onScaleEnd(ScaleGestureDetector detector) {
-//            checkGesture(Gesture.ZOOM);
-//        }
-//    }
 
     private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};
 
@@ -394,30 +306,4 @@ public class GameActivity extends GestureCompatActivity {
             }
         }
     }
-
-//    public enum Gesture {
-//        BAPP (R.mipmap.bappit),
-//        FLING (R.mipmap.fling_it),
-//        SHAKE (R.mipmap.shake_it),
-//        TWIST (R.mipmap.twist_it),
-//        ZOOM (R.mipmap.zoom_it);
-//
-//        private int gestureImageId;
-//
-//        Gesture (int imageId) {
-//            this.gestureImageId = imageId;
-//        }
-//
-//        public int getGestureImageId() {
-//            return gestureImageId;
-//        }
-//
-//        public static int numGestures() {
-//            return values().length;
-//        }
-//
-//        public static Gesture getRandomGesture() {
-//            return values()[rand.nextInt(Gesture.numGestures())];
-//        }
-//    }
 }
