@@ -7,7 +7,6 @@
 /build
 /captures
 .externalNativeBuild
-*.xml
 *.iml
 *.gradle
 /local.properties
