@@ -250,7 +250,7 @@ public class GameActivity extends GestureCompatActivity {
         else{//random
             setCurrentGesture(Gesture.getRandomGesture());
         }
-        Gesture currentGesture = getCurrentGesture();
+        GestureCompatActivity.Gesture currentGesture = getCurrentGesture();
         gestureComplete = false;
 
         //Play announcer sound clip for correct gesture

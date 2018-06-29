@@ -143,29 +143,29 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         }
     }
 
-//    public enum Gesture {
-//        BAPP (R.mipmap.bappit),
-//        FLING (R.mipmap.fling_it),
-//        SHAKE (R.mipmap.shake_it),
-//        TWIST (R.mipmap.twist_it),
-//        ZOOM (R.mipmap.zoom_it);
-//
-//        private int gestureImageId;
-//
-//        Gesture (int imageId) {
-//            this.gestureImageId = imageId;
-//        }
-//
-//        public int getGestureImageId() {
-//            return gestureImageId;
-//        }
-//
-//        public static int numGestures() {
-//            return values().length;
-//        }
-//
-//        public static Gesture getRandomGesture() {
-//            return values()[rand.nextInt(Gesture.numGestures())];
-//        }
-//    }
+    public enum Gesture {
+        BAPP (R.mipmap.bappit),
+        FLING (R.mipmap.fling_it),
+        SHAKE (R.mipmap.shake_it),
+        TWIST (R.mipmap.twist_it),
+        ZOOM (R.mipmap.zoom_it);
+
+        private int gestureImageId;
+
+        Gesture (int imageId) {
+            this.gestureImageId = imageId;
+        }
+
+        public int getGestureImageId() {
+            return gestureImageId;
+        }
+
+        public static int numGestures() {
+            return values().length;
+        }
+
+        public static Gesture getRandomGesture() {
+            return values()[rand.nextInt(Gesture.numGestures())];
+        }
+    }
 }
