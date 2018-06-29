@@ -11,6 +11,9 @@ public class StartMenuActivity extends AppCompatActivity {
 
     ImageView startButton;
     Button settingsButton;
+    Button highScoresButton;
+    Button tutorialButton;
+    Button practiceButton;
     View mainView;
 
     @Override
@@ -38,7 +41,7 @@ public class StartMenuActivity extends AppCompatActivity {
             }
         });
 
-        Button highScoresButton = (Button) findViewById(R.id.highscore_btn);
+        highScoresButton = (Button) findViewById(R.id.highscore_btn);
         highScoresButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +50,7 @@ public class StartMenuActivity extends AppCompatActivity {
             }
         });
 
-        Button tutorialButton = (Button) findViewById(R.id.tutorial_btn);
+        tutorialButton = (Button) findViewById(R.id.tutorial_btn);
         tutorialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

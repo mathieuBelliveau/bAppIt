@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import java.util.ArrayList;
 
-public class TutorialMenuActivity extends GestureCompatActivity {
+public class TutorialMenuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +35,11 @@ public class TutorialMenuActivity extends GestureCompatActivity {
         }
     }
 
-    public void gestureSuccess(GestureCompatActivity.Gesture gesture){}
-
-    public void gestureFailure(GestureCompatActivity.Gesture gesture){}
-
-    public void checkGesture(GestureCompatActivity.Gesture gesture){}
+//    public void gestureSuccess(GestureCompatActivity.Gesture gesture){}
+//
+//    public void gestureFailure(GestureCompatActivity.Gesture gesture){}
+//
+//    public void checkGesture(GestureCompatActivity.Gesture gesture){}
 
 
     private class Gesture {
