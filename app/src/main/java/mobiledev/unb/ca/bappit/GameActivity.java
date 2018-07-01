@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class GameActivity extends GestureCompatActivity {
 
     private View gameView;
