@@ -35,13 +35,6 @@ public class TutorialMenuActivity extends AppCompatActivity {
         }
     }
 
-//    public void gestureSuccess(GestureCompatActivity.Gesture gesture){}
-//
-//    public void gestureFailure(GestureCompatActivity.Gesture gesture){}
-//
-//    public void checkGesture(GestureCompatActivity.Gesture gesture){}
-
-
     private class Gesture {
         private String name;
         private int resourceID;

@@ -125,7 +125,7 @@ public class GameActivity extends GestureCompatActivity {
         return super.onTouchEvent(event);
     }
 
-    public void gestureSuccess(Gesture gesture)
+    public void gestureMatch(Gesture gesture)
     {
         increaseScore();
         setGestureComplete(true);
@@ -139,7 +139,7 @@ public class GameActivity extends GestureCompatActivity {
         sounds.playSound(gesture, true);
     }
 
-    public void gestureFailure(Gesture gesture)
+    public void gestureMismatch(Gesture gesture)
     {
         gestureTimer.cancel();
         if(isGestureComplete())
@@ -148,15 +148,6 @@ public class GameActivity extends GestureCompatActivity {
         correctionMessage(gesture);
         gameOver();
     }
-
-//    public void checkGesture(Gesture gesture) {
-//        if(getCurrentGesture() == gesture && !isGestureComplete()) {//TODO Does gestureComplete go here, or in the Parent?
-//            gestureSuccess(gesture);
-//        }
-//        else {
-//            gestureFailure(gesture);
-//        }
-//    }
 
     private void correctionMessage(Gesture gesture){
         String mismatchMessage = "";//TODO Get a better message

@@ -31,8 +31,8 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     private static Random rand;
 
-    abstract void gestureSuccess(Gesture gesture);
-    abstract void gestureFailure(Gesture gesture);
+    abstract void gestureMatch(Gesture gesture);
+    abstract void gestureMismatch(Gesture gesture);
 //    abstract void checkGesture(Gesture gesture);
 
     @Override
@@ -69,10 +69,10 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     public void checkGesture(Gesture gesture) {
         if(getCurrentGesture() == gesture && !gestureComplete) {
-            gestureSuccess(gesture);
+            gestureMatch(gesture);
         }
         else {
-            gestureFailure(gesture);
+            gestureMismatch(gesture);
         }
     }
 
