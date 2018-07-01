@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class GameActivity extends GestureCompatActivity {
 
     private View gameView;
@@ -148,15 +146,6 @@ public class GameActivity extends GestureCompatActivity {
         correctionMessage(gesture);
         gameOver();
     }
-
-//    public void checkGesture(Gesture gesture) {
-//        if(getCurrentGesture() == gesture && !isGestureComplete()) {//TODO Does gestureComplete go here, or in the Parent?
-//            gestureSuccess(gesture);
-//        }
-//        else {
-//            gestureFailure(gesture);
-//        }
-//    }
 
     private void correctionMessage(Gesture gesture){
         String mismatchMessage = "";//TODO Get a better message
