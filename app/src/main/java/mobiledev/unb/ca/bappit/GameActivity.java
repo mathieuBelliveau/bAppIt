@@ -70,7 +70,7 @@ public class GameActivity extends GestureCompatActivity {
         loadResources();
     }
 
-    public void startGame() {
+    public void startInstance() {
         score = 0;
         deltaPlayRate = 0.015f;
 
@@ -282,7 +282,7 @@ public class GameActivity extends GestureCompatActivity {
         protected void onPostExecute(MusicState state) {
             super.onPostExecute(state);
             if(state == MusicState.JUST_STARTED) {
-                startGame();
+                startInstance();
             }
             else if (state == MusicState.STILL_LOADING) {
                 loadResources();

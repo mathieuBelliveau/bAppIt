@@ -44,7 +44,6 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
         rand = new Random();
 
-
         initShakeDetect();
         initTiltDetect();
     }

@@ -1,10 +1,13 @@
 package mobiledev.unb.ca.bappit;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+//FIXME - should this be a sandbox, instead of a practice mode?
 public class PracticeActivity extends GestureCompatActivity {
     private View gameView;
 
@@ -30,6 +33,14 @@ public class PracticeActivity extends GestureCompatActivity {
 
         quitButton.setVisibility(View.GONE);
         practiceGestureImage.setVisibility(View.GONE);
+        loadResources();
+    }
+
+    public void startInstance()//FIXME - may abstract in super class
+    {
+        SharedPreferences prefs = this.getSharedPreferences();//FIXME);
+
+        quitButton.setVisibility(View.VISIBLE);
     }
 
     public void gestureMatch(Gesture gesture)
@@ -40,7 +51,7 @@ public class PracticeActivity extends GestureCompatActivity {
 
     public void gestureMismatch(Gesture gesture)
     {
-
+        //TODO
     }
 
     private void hideSystemUI() {//FIXME which flags can go?
@@ -51,5 +62,27 @@ public class PracticeActivity extends GestureCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    private void loadResources()
+    {
+        LoadResourcesTask task = new LoadResourcesTask();
+        task.execute();
+    }
+
+    private class LoadResourcesTask extends AsyncTask<Void, Integer, Void>//FIXME - not set in stone
+    {
+        @Override
+        protected void doInBackground(Void... params)
+        {
+            //TODO
+        }
+
+        @Override
+        protected void onPostExecute()
+        {
+            //TODO
+            startInstance();
+        }
     }
 }
