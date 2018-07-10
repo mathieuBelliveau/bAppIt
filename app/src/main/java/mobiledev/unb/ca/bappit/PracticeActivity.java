@@ -7,12 +7,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-//FIXME - should this be a sandbox, instead of a practice mode?
+/**
+ * @author Mathieu Belliveau
+ * An activity to practice the set of gestures through prompts and user responses.
+ *
+ */
+/*FIXME - Should it begin as a cycle, or have a series of static images that prompt that gesture?
+    Probably the former*/
 public class PracticeActivity extends GestureCompatActivity {
     private View gameView;
 
     private Button quitButton;
     private ImageView practiceGestureImage;
+
+    private Sounds sounds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +28,43 @@ public class PracticeActivity extends GestureCompatActivity {
         setContentView(R.layout.activity_practice);
         gameView = getWindow().getDecorView();
         hideSystemUI();
+
+        //TODO - Add static layout similar to TutorialMenuActivity.java
+
+        /*TODO
+        ArrayList<Gesture> gestures = new ArrayList<>();
+        gestures.add(new Gesture("Fling It!", R.raw.vid_fling_it, R.id.guide_swipe_btn));
+        gestures.add(new Gesture("bApp It!", R.raw.vid_tap_it, R.id.guide_bappit_btn));
+        gestures.add(new Gesture("Shake It!", R.raw.vid_shake_it, R.id.guide_shake_btn));
+        gestures.add(new Gesture("Twist It!", R.raw.vid_twist_it, R.id.guide_twist_btn));
+        gestures.add(new Gesture("Zoom It!", R.raw.vid_zoom_it, R.id.guide_zoom_btn));
+
+        TODO for (final Gesture gesture : gestures) {
+            Button btn = (Button) findViewById(gesture.buttonID);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(TutorialMenuActivity.this, TutorialVideoActivity.class);
+                    intent.putExtra(TutorialVideoActivity.GESTURE_VIDEO_ID, gesture.resourceID);
+                    intent.putExtra(TutorialVideoActivity.GESTURE_NAME, gesture.name);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        TODO
+            private class Gesture {
+        private String name;
+        private int resourceID;
+        private int buttonID;
+
+        private Gesture (String name, int resourceId, int buttonID) {
+            this.name = name;
+            this.resourceID = resourceId;
+            this.buttonID = buttonID;
+        }
+    }
+         */
 
         quitButton = (Button) (findViewById(R.id.quit_btn));
         quitButton.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +83,7 @@ public class PracticeActivity extends GestureCompatActivity {
 
     public void startInstance()//FIXME - may abstract in super class
     {
-        SharedPreferences prefs = this.getSharedPreferences();//FIXME);
+        SharedPreferences prefs = this.getSharedPreferences();//TODO - sound preferences
 
         quitButton.setVisibility(View.VISIBLE);
     }
