@@ -40,7 +40,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".TutorialVideoActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".PracticeActivity" />
+        <activity android:name=".PracticeMenuActivity" />
     </application>
 
 </manifest>

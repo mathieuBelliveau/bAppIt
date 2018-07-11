@@ -63,7 +63,7 @@ public class StartMenuActivity extends AppCompatActivity {
         practiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StartMenuActivity.this, PracticeActivity.class);
+                Intent intent = new Intent(StartMenuActivity.this, PracticeMenuActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);//FIXME like in line 30
                 startActivity(intent);
             }
