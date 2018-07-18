@@ -26,11 +26,11 @@ public class PracticeMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_practice_menu);
 
         ArrayList<GestureID> gestures = new ArrayList<>();
-        gestures.add(new GestureID("Fling It!", R.raw.vid_fling_it, R.id.guide_swipe_btn));
-        gestures.add(new GestureID("bApp It!", R.raw.vid_tap_it, R.id.guide_bappit_btn));
-        gestures.add(new GestureID("Shake It!", R.raw.vid_shake_it, R.id.guide_shake_btn));
-        gestures.add(new GestureID("Twist It!", R.raw.vid_twist_it, R.id.guide_twist_btn));
-        gestures.add(new GestureID("Zoom It!", R.raw.vid_zoom_it, R.id.guide_zoom_btn));
+        gestures.add(new GestureID("bApp It!", R.raw.vid_tap_it, R.id.practice_bappit_btn, 0));
+        gestures.add(new GestureID("Fling It!", R.raw.vid_fling_it, R.id.practice_swipe_btn, 1));
+        gestures.add(new GestureID("Shake It!", R.raw.vid_shake_it, R.id.practice_shake_btn, 2));
+        gestures.add(new GestureID("Twist It!", R.raw.vid_twist_it, R.id.practice_twist_btn, 3));
+        gestures.add(new GestureID("Zoom It!", R.raw.vid_zoom_it, R.id.practice_zoom_btn, 4));
 
         for (final GestureID gesture : gestures) {
             Button btn = (Button) findViewById(gesture.buttonID);
@@ -40,6 +40,7 @@ public class PracticeMenuActivity extends AppCompatActivity {
                     Intent intent = new Intent(PracticeMenuActivity.this, PracticeGestureActivity.class);
                     intent.putExtra(PracticeGestureActivity.GESTURE_ID, gesture.resourceID);
                     intent.putExtra(PracticeGestureActivity.GESTURE_NAME, gesture.name);
+                    intent.putExtra(PracticeGestureActivity.GESTURE_CODE, gesture.gestureCode);
                     startActivity(intent);
                 }
             });
@@ -59,11 +60,13 @@ public class PracticeMenuActivity extends AppCompatActivity {
         private String name;
         private int resourceID;
         private int buttonID;
+        private int gestureCode;//identifies which Gesture enum value
 
-        private GestureID (String name, int resourceId, int buttonID) {
+        private GestureID (String name, int resourceId, int buttonID, int gestureCode) {
             this.name = name;
             this.resourceID = resourceId;
             this.buttonID = buttonID;
+            this.gestureCode = gestureCode;
         }
     }
 }

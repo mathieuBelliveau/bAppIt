@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/guide_swipe_btn"
+        android:id="@+id/practice_swipe_btn"
         android:layout_width="172dp"
         android:layout_height="172dp"
         android:layout_marginBottom="8dp"
@@ -49,7 +49,7 @@
         app:layout_constraintVertical_bias="0.723" />
 
     <Button
-        android:id="@+id/guide_shake_btn"
+        android:id="@+id/practice_shake_btn"
         android:layout_width="175dp"
         android:layout_height="175dp"
         android:layout_marginBottom="8dp"
@@ -66,7 +66,7 @@
         app:layout_constraintVertical_bias="0.324" />
 
     <Button
-        android:id="@+id/guide_zoom_btn"
+        android:id="@+id/practice_zoom_btn"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:layout_marginBottom="8dp"
@@ -83,7 +83,7 @@
         app:layout_constraintVertical_bias="0.595" />
 
     <Button
-        android:id="@+id/guide_twist_btn"
+        android:id="@+id/practice_twist_btn"
         android:layout_width="145dp"
         android:layout_height="145dp"
         android:layout_marginBottom="8dp"
@@ -100,14 +100,14 @@
         app:layout_constraintVertical_bias="0.157" />
 
     <Button
-        android:id="@+id/guide_bappit_btn"
+        android:id="@+id/practice_bappit_btn"
         android:layout_width="258dp"
         android:layout_height="258dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@mipmap/bappit"
+        android:background="@mipmap/bapp_it"
         android:fontFamily="casual"
         android:rotation="-8"
         android:textAppearance="@style/TextAppearance.AppCompat"

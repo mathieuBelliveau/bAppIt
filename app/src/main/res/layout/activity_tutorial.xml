@@ -94,7 +94,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@mipmap/bappit"
+        android:background="@mipmap/bapp_it"
         android:fontFamily="casual"
         android:rotation="-8"
         android:textAppearance="@style/TextAppearance.AppCompat"

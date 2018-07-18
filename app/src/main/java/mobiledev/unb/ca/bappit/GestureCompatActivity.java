@@ -144,7 +144,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
     }
 
     public enum Gesture {
-        BAPP (R.mipmap.bappit),
+        BAPP (R.mipmap.bapp_it),
         FLING (R.mipmap.fling_it),
         SHAKE (R.mipmap.shake_it),
         TWIST (R.mipmap.twist_it),
