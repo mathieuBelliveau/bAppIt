@@ -70,7 +70,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     }
 
     public void beginPractice(){
-//        practiceGestureVideo.stopPlayback();//FIXME - stop here or at 55?
+//        practiceGestureVideo.stopPlayback();//FIXME - stop here or in onCompletionListener
         practiceGestureVideo.setVisibility(View.INVISIBLE);
         practiceGestureImage.setVisibility(View.VISIBLE);
 
@@ -79,12 +79,12 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
     public void gestureMatch(Gesture gesture)
     {
-        //TODO
+        //TODO - Checkmark, with n/3 successes shown
         setGestureComplete(true);
     }
 
     public void gestureMismatch(Gesture gesture)
     {
-        //TODO
+        //TODO - "X", with n/3 successes reset
     }
 }
