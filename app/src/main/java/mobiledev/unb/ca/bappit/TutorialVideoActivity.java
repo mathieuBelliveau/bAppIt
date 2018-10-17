@@ -31,8 +31,14 @@ public class TutorialVideoActivity extends AppCompatActivity {
         video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
+                mp.setLooping(false);
                 mp.setVolume(0, 0);
+            }
+        });
+        video.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                TutorialVideoActivity.this.finish();
             }
         });
         video.start();

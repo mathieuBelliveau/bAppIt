@@ -26,45 +26,57 @@ public class PracticeMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_practice_menu);
 
         ArrayList<GestureID> gestures = new ArrayList<>();
-        gestures.add(new GestureID("bApp It!", R.raw.vid_tap_it, R.id.practice_bappit_btn, 0));
-        gestures.add(new GestureID("Fling It!", R.raw.vid_fling_it, R.id.practice_swipe_btn, 1));
-        gestures.add(new GestureID("Shake It!", R.raw.vid_shake_it, R.id.practice_shake_btn, 2));
-        gestures.add(new GestureID("Twist It!", R.raw.vid_twist_it, R.id.practice_twist_btn, 3));
-        gestures.add(new GestureID("Zoom It!", R.raw.vid_zoom_it, R.id.practice_zoom_btn, 4));
+        gestures.add(new GestureID("bApp It!",R.mipmap.bapp_it, R.raw.vid_tap_it, R.id.practice_bappit_btn, 0));
+        gestures.add(new GestureID("Fling It!",R.mipmap.fling_it, R.raw.vid_fling_it, R.id.practice_swipe_btn, 1));
+        gestures.add(new GestureID("Shake It!",R.mipmap.shake_it,R.raw.vid_shake_it, R.id.practice_shake_btn, 2));
+        gestures.add(new GestureID("Twist It!",R.mipmap.twist_it, R.raw.vid_twist_it, R.id.practice_twist_btn, 3));
+        gestures.add(new GestureID("Zoom It!",R.mipmap.zoom_it, R.raw.vid_zoom_it, R.id.practice_zoom_btn, 4));
+
+
 
         for (final GestureID gesture : gestures) {
             Button btn = (Button) findViewById(gesture.buttonID);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(PracticeMenuActivity.this, PracticeGestureActivity.class);
-                    intent.putExtra(PracticeGestureActivity.GESTURE_ID, gesture.resourceID);
-                    intent.putExtra(PracticeGestureActivity.GESTURE_NAME, gesture.name);
-                    intent.putExtra(PracticeGestureActivity.GESTURE_CODE, gesture.gestureCode);
-                    startActivity(intent);
+//                    Intent intent1 = new Intent(PracticeMenuActivity.this, TutorialVideoActivity.class);
+//
+//                    intent1.putExtra(TutorialVideoActivity.GESTURE_VIDEO_ID, gesture.videoID);
+//                    intent1.putExtra(TutorialVideoActivity.GESTURE_NAME, gesture.name);
+//
+//                    startActivity(intent1);
+                    Intent intent2 = new Intent(PracticeMenuActivity.this, PracticeGestureActivity.class);
+
+                    intent2.putExtra(PracticeGestureActivity.GESTURE_ID, gesture.imageID);
+                    intent2.putExtra(PracticeGestureActivity.GESTURE_NAME, gesture.name);
+                    intent2.putExtra(PracticeGestureActivity.GESTURE_CODE, gesture.gestureCode);
+                    startActivity(intent2);
                 }
             });
         }
-        quitButton = (Button) (findViewById(R.id.quit_btn));
+        quitButton = (Button) (findViewById(R.id.quit_practice_btn));
         quitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Intent to send back to main menu
+                Intent intent = new Intent(PracticeMenuActivity.this, StartMenuActivity.class);
+                startActivity(intent);
             }
         });
 
-        quitButton.setVisibility(View.GONE);
+
     }
 
     private class GestureID {
         private String name;
-        private int resourceID;
+        private int imageID;
+        private int videoID;
         private int buttonID;
         private int gestureCode;//identifies which Gesture enum value
 
-        private GestureID (String name, int resourceId, int buttonID, int gestureCode) {
+        private GestureID (String name, int imageID, int videoId, int buttonID, int gestureCode) {
             this.name = name;
-            this.resourceID = resourceId;
+            this.imageID = imageID;
+            this.videoID = videoId;
             this.buttonID = buttonID;
             this.gestureCode = gestureCode;
         }

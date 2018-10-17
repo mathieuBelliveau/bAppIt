@@ -23,11 +23,14 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     public final static String GESTURE_CODE = "gestureCode";
 
     private ImageView practiceGestureImage;
+    private ImageView checkMarkImage;
     private VideoView practiceGestureVideo;
 
     private int gestureID;
     private String gestureName;
     private int gestureCode;
+
+    private int count = 0;//correct execution
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -35,46 +38,32 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice_gesture);
 
+        TextView gestureNameView = (TextView) findViewById(R.id.practice_action_name);
+        gestureNameView.setText(gestureName);
+
+        practiceGestureImage = (ImageView) findViewById(R.id.practice_gesture_img);
+
         Intent intent = getIntent();
         gestureID = intent.getIntExtra(GESTURE_ID, 0);
         gestureName = intent.getStringExtra(GESTURE_NAME);
         gestureCode = intent.getIntExtra(GESTURE_CODE, 0);
 
-        TextView gestureNameView = (TextView) findViewById(R.id.practice_action_name);
-        gestureNameView.setText(gestureName);
+        setCurrentGesture(Gesture.values()[gestureCode]);
 
-        practiceGestureImage = (ImageView) findViewById(R.id.practice_gesture_img);
-        practiceGestureImage.setVisibility(View.INVISIBLE);
+        practiceGestureImage.setImageResource(gestureID);
 
-        practiceGestureVideo = (VideoView)findViewById(R.id.practice_tutorial_video);
-        practiceGestureVideo.setVisibility(View.VISIBLE);
-        Uri uri = Uri.parse("android.resource://" + getPackageName()+ "/" + gestureID);
-        practiceGestureVideo.setVideoURI(uri);
-        practiceGestureVideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(false);
-                mp.setVolume(0, 0);
-            }
-        });
-        practiceGestureVideo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                mp.setVolume(100,100);//FIXME - sharedprefs instead
-                mp.stop();//FIXME - unsure if proper to stop video here.
-                PracticeGestureActivity context = (PracticeGestureActivity) getApplicationContext();
-                context.beginPractice();
-                //TODO - Play after the listener is pressed and the video completes
-            }
-        });
-        practiceGestureVideo.start();
+
+
+        //practiceGestureImage.setVisibility(View.INVISIBLE);
+
+
+
+        completeGesture();
+
     }
 
-    public void beginPractice(){
-//        practiceGestureVideo.stopPlayback();//FIXME - stop here or in onCompletionListener
-        practiceGestureVideo.setVisibility(View.INVISIBLE);
-        practiceGestureImage.setVisibility(View.VISIBLE);
+    public void completeGesture() {
 
-        setCurrentGesture(Gesture.values()[gestureCode]);
     }
 
     public void gestureMatch(Gesture gesture)

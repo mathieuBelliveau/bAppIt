@@ -22,33 +22,33 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/bapp_it" />
 
-    <ImageView
-        android:id="@+id/check_mark_img"
-        android:layout_width="288dp"
-        android:layout_height="303dp"
-        android:contentDescription="Fling It!"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498"
-        app:srcCompat="@mipmap/check_mark_transparent" />
+    <!--<ImageView-->
+        <!--android:id="@+id/check_mark_img"-->
+        <!--android:layout_width="288dp"-->
+        <!--android:layout_height="303dp"-->
+        <!--android:contentDescription="Fling It!"-->
+        <!--android:visibility="gone"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.498"-->
+        <!--app:srcCompat="@mipmap/check_mark_transparent" />-->
 
-    <VideoView
-        android:id="@+id/practice_tutorial_video"
-        android:layout_width="330dp"
-        android:layout_height="330dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.651" />
+    <!--<VideoView-->
+        <!--android:id="@+id/practice_tutorial_video"-->
+        <!--android:layout_width="330dp"-->
+        <!--android:layout_height="330dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:visibility="visible"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="0.651" />-->
 
     <TextView
         android:id="@+id/practice_action_name"
@@ -59,7 +59,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="casual"
-        android:text="Twist It!"
+        android:text="bApp It!"
         android:textAlignment="center"
         android:textColor="@android:color/holo_green_light"
         android:textSize="50sp"

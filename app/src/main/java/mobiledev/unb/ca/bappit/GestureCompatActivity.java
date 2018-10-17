@@ -33,6 +33,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     abstract void gestureMatch(Gesture gesture);
     abstract void gestureMismatch(Gesture gesture);
+    abstract void completeGesture();
 //    abstract void checkGesture(Gesture gesture);
 
     @Override
@@ -66,14 +67,6 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         this.mDetector.onTouchEvent(event);
     }
 
-    public void checkGesture(Gesture gesture) {
-        if(getCurrentGesture() == gesture && !gestureComplete) {
-            gestureMatch(gesture);
-        }
-        else {
-            gestureMismatch(gesture);
-        }
-    }
 
     public boolean isGestureComplete() {
         return gestureComplete;
@@ -89,6 +82,15 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     public void setCurrentGesture(Gesture currentGesture) {
         this.currentGesture = currentGesture;
+    }
+
+    public void checkGesture(Gesture gesture) {
+        if(currentGesture == gesture && !gestureComplete) {
+            gestureMatch(gesture);
+        }
+        else {
+            gestureMismatch(gesture);
+        }
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {

@@ -165,7 +165,7 @@ public class GameActivity extends GestureCompatActivity {
 
     }
 
-    private void completeGesture()
+    public void completeGesture()
     {
         if(score < 5)//Cycle intro values
         {
