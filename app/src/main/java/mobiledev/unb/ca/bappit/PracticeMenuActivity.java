@@ -50,6 +50,8 @@ public class PracticeMenuActivity extends AppCompatActivity {
                     intent2.putExtra(PracticeGestureActivity.GESTURE_ID, gesture.imageID);
                     intent2.putExtra(PracticeGestureActivity.GESTURE_NAME, gesture.name);
                     intent2.putExtra(PracticeGestureActivity.GESTURE_CODE, gesture.gestureCode);
+
+                    intent2.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent2);
                 }
             });

@@ -36,7 +36,7 @@ public class GameActivity extends GestureCompatActivity {
     private int timeForGesture;
     private CountDownTimer gestureTimer;
     private ProgressBar timerProgressBar;
-    private Sounds sounds;
+//    private Sounds sounds;
 
     private boolean isVibrate;
 
@@ -86,7 +86,7 @@ public class GameActivity extends GestureCompatActivity {
         completeGesture();
     }
 
-    private void loadResources()
+    public void loadResources()
     {
         LoadResourcesTask task = new LoadResourcesTask();
         task.execute();
@@ -250,43 +250,43 @@ public class GameActivity extends GestureCompatActivity {
         super.onPause();
     }
 
-    private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};//TODO Move to GestureCompatActivity.java
-
-    private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
-        @Override
-        protected MusicState doInBackground(Void... params) {
-            if(sounds == null) {
-                //Hardware buttons setting to adjust the media sound
-                GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
-                sounds = new Sounds(audioManager,  GameActivity.this);
-            }
-
-            if(sounds.loaded && sounds.musicPlaying) {
-                return MusicState.PLAYING;
-            }
-            else if (sounds.loaded) {
-                sounds.startBackgroundMusic();
-                return MusicState.JUST_STARTED;
-            } else {
-                try {
-                   Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return MusicState.STILL_LOADING;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(MusicState state) {
-            super.onPostExecute(state);
-            if(state == MusicState.JUST_STARTED) {
-                startInstance();
-            }
-            else if (state == MusicState.STILL_LOADING) {
-                loadResources();
-            }
-        }
-    }
+//    private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};//TODO Move to GestureCompatActivity.java
+//
+//    private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
+//        @Override
+//        protected MusicState doInBackground(Void... params) {
+//            if(sounds == null) {
+//                //Hardware buttons setting to adjust the media sound
+//                GameActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+//                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+//                sounds = new Sounds(audioManager,  GameActivity.this);
+//            }
+//
+//            if(sounds.loaded && sounds.musicPlaying) {
+//                return MusicState.PLAYING;
+//            }
+//            else if (sounds.loaded) {
+//                sounds.startBackgroundMusic();
+//                return MusicState.JUST_STARTED;
+//            } else {
+//                try {
+//                   Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                return MusicState.STILL_LOADING;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(MusicState state) {
+//            super.onPostExecute(state);
+//            if(state == MusicState.JUST_STARTED) {
+//                startInstance();
+//            }
+//            else if (state == MusicState.STILL_LOADING) {
+//                loadResources();
+//            }
+//        }
+//    }
 }

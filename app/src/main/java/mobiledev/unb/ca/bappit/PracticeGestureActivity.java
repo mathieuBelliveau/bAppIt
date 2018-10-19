@@ -65,7 +65,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
     }
 
-    public void completeGesture() {
+    protected void completeGesture() {
         setGestureComplete(false);
 
 
@@ -74,30 +74,38 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         //TODO - animation
     }
 
-    public void gestureMatch(Gesture gesture)
+    protected void gestureMatch(Gesture gesture)
     {
         //TODO - Checkmark, with n/3 successes show
-        try {
-            practiceGestureSwitcher.setImageResource(0);
-            practiceGestureSwitcher.setImageResource(R.mipmap.check_mark_transparent);
-            count++;
+        practiceGestureSwitcher.setImageResource(0);
+        practiceGestureSwitcher.setImageResource(R.mipmap.check_mark_transparent);
+        count++;
 
-            //TimeUnit.SECONDS.sleep(5); FIXME - If you still want this, thne you need to put it in an AsyncTask
+        //TimeUnit.SECONDS.sleep(5); FIXME - If you still want this, thne you need to put it in an AsyncTask
 
-            practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
-            practiceGestureSwitcher.setImageResource(gestureID);
+        practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
+        practiceGestureSwitcher.setImageResource(gestureID);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (count == 3) {
+            Intent intent = new Intent(PracticeGestureActivity.this, PracticeMenuActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
         }
-
     }
 
-    public void gestureMismatch(Gesture gesture)
+    protected void gestureMismatch(Gesture gesture)
     {
         practiceGestureSwitcher.setImageResource(gestureID);
         count = 0;
         //TODO - "X", with n/3 successes reset
+    }
+
+    protected void loadResources() {
+
+    }
+
+    protected void startInstance() {
+
     }
 
     private void initSwitcher() {

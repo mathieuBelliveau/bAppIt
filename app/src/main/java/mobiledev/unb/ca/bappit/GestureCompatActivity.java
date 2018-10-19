@@ -3,6 +3,8 @@ package mobiledev.unb.ca.bappit;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,9 +33,14 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
     private static Random rand;
 
+    protected Sounds sounds;
+
     abstract void gestureMatch(Gesture gesture);
     abstract void gestureMismatch(Gesture gesture);
     abstract void completeGesture();
+
+    abstract void startInstance();
+    abstract void loadResources();
 //    abstract void checkGesture(Gesture gesture);
 
     @Override
@@ -47,6 +54,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
         initShakeDetect();
         initTiltDetect();
+        registerListeners();
     }
 
     public void registerListeners()
@@ -135,7 +143,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         });
     }
 
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+    protected class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
@@ -153,7 +161,7 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         }
     }
 
-    public enum Gesture {
+    protected enum Gesture {
         BAPP (R.mipmap.bapp_it),
         FLING (R.mipmap.fling_it),
         SHAKE (R.mipmap.shake_it),
@@ -176,6 +184,46 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
 
         public static Gesture getRandomGesture() {
             return values()[rand.nextInt(Gesture.numGestures())];
+        }
+    }
+
+    protected enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};//FIXME - should this be inherited differently? Do Gestures always need this?
+
+    protected class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
+        @Override
+        protected MusicState doInBackground(Void... params) {
+            if(sounds == null) {
+                //Hardware buttons setting to adjust the media sound
+                GestureCompatActivity.this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                sounds = new Sounds(audioManager,  GestureCompatActivity.this);
+            }
+
+            if(sounds.loaded && sounds.musicPlaying) {
+                return MusicState.PLAYING;
+            }
+            else if (sounds.loaded) {
+                sounds.startBackgroundMusic();
+                return MusicState.JUST_STARTED;
+            } else {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return MusicState.STILL_LOADING;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(MusicState state) {
+            super.onPostExecute(state);
+            if(state == MusicState.JUST_STARTED) {
+                startInstance();
+            }
+            else if (state == MusicState.STILL_LOADING) {
+                loadResources();
+            }
         }
     }
 
