@@ -8,8 +8,8 @@
     tools:context="mobiledev.unb.ca.bappit.PracticeGestureActivity"
     android:background="@android:color/background_dark">
 
-    <ImageView
-        android:id="@+id/practice_gesture_img"
+    <ImageSwitcher
+        android:id="@+id/practice_gesture_switcher"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginBottom="8dp"
@@ -20,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/bapp_it" />
+         />
+    <!--app:srcCompat="@mipmap/bapp_it"-->
 
     <!--<ImageView-->
         <!--android:id="@+id/check_mark_img"-->

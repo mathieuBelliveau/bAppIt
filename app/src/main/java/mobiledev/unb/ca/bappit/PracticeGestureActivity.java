@@ -1,14 +1,16 @@
 package mobiledev.unb.ca.bappit;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
+import android.widget.ViewSwitcher;
+import android.view.animation.AnimationUtils;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author MagnumIT-Admin
@@ -22,7 +24,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     public final static String GESTURE_NAME = "gestureName";
     public final static String GESTURE_CODE = "gestureCode";
 
-    private ImageView practiceGestureImage;
+    private ImageSwitcher practiceGestureSwitcher;
     private ImageView checkMarkImage;
     private VideoView practiceGestureVideo;
 
@@ -41,7 +43,8 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         TextView gestureNameView = (TextView) findViewById(R.id.practice_action_name);
         gestureNameView.setText(gestureName);
 
-        practiceGestureImage = (ImageView) findViewById(R.id.practice_gesture_img);
+        practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
+        initSwitcher();
 
         Intent intent = getIntent();
         gestureID = intent.getIntExtra(GESTURE_ID, 0);
@@ -50,11 +53,11 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
         setCurrentGesture(Gesture.values()[gestureCode]);
 
-        practiceGestureImage.setImageResource(gestureID);
+        practiceGestureSwitcher.setImageResource(gestureID);
 
 
 
-        //practiceGestureImage.setVisibility(View.INVISIBLE);
+        //practiceGestureSwitcher.setVisibility(View.INVISIBLE);
 
 
 
@@ -63,17 +66,50 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     }
 
     public void completeGesture() {
+        setGestureComplete(false);
 
+
+        //TODO - sounds
+
+        //TODO - animation
     }
 
     public void gestureMatch(Gesture gesture)
     {
-        //TODO - Checkmark, with n/3 successes shown
-        setGestureComplete(true);
+        //TODO - Checkmark, with n/3 successes show
+        try {
+            practiceGestureSwitcher.setImageResource(0);
+            practiceGestureSwitcher.setImageResource(R.mipmap.check_mark_transparent);
+            count++;
+
+            //TimeUnit.SECONDS.sleep(5); FIXME - If you still want this, thne you need to put it in an AsyncTask
+
+            practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
+            practiceGestureSwitcher.setImageResource(gestureID);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void gestureMismatch(Gesture gesture)
     {
+        practiceGestureSwitcher.setImageResource(gestureID);
+        count = 0;
         //TODO - "X", with n/3 successes reset
+    }
+
+    private void initSwitcher() {
+        practiceGestureSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                ImageView imageView = new ImageView(PracticeGestureActivity.this);
+                return imageView;
+            }
+        });
+
+        practiceGestureSwitcher.setInAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left));//TODO - better animations
+        practiceGestureSwitcher.setOutAnimation(AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right));
     }
 }

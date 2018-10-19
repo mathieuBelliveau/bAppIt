@@ -117,11 +117,11 @@ public class GameActivity extends GestureCompatActivity {
             }}
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-        setTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event){
+//        setTouchEvent(event);
+//        return super.onTouchEvent(event);
+//    }
 
     public void gestureMatch(Gesture gesture)
     {
@@ -250,7 +250,7 @@ public class GameActivity extends GestureCompatActivity {
         super.onPause();
     }
 
-    private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};
+    private enum MusicState {JUST_STARTED, PLAYING, STILL_LOADING};//TODO Move to GestureCompatActivity.java
 
     private class LoadResourcesTask extends AsyncTask<Void, Integer, MusicState> {
         @Override

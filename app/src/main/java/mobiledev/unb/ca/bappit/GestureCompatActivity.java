@@ -67,6 +67,14 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
         this.mDetector.onTouchEvent(event);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        setTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+
+
 
     public boolean isGestureComplete() {
         return gestureComplete;
@@ -170,4 +178,6 @@ public abstract class GestureCompatActivity extends AppCompatActivity{
             return values()[rand.nextInt(Gesture.numGestures())];
         }
     }
+
+
 }
