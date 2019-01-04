@@ -25,6 +25,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     public final static String GESTURE_CODE = "gestureCode";
 
     private ImageSwitcher practiceGestureSwitcher;
+    TextView gestureScore;
     private ImageView checkMarkImage;
     private VideoView practiceGestureVideo;
 
@@ -40,16 +41,21 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice_gesture);
 
-        TextView gestureNameView = (TextView) findViewById(R.id.practice_action_name);
-        gestureNameView.setText(gestureName);
-
-        practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
-        initSwitcher();
-
         Intent intent = getIntent();
         gestureID = intent.getIntExtra(GESTURE_ID, 0);
         gestureName = intent.getStringExtra(GESTURE_NAME);
         gestureCode = intent.getIntExtra(GESTURE_CODE, 0);
+
+        TextView gestureNameView = (TextView) findViewById(R.id.practice_action_name);
+        gestureNameView.setText(gestureName);
+
+        gestureScore = (TextView) findViewById(R.id.practice_score);
+        gestureScore.setText("0/3");
+
+        practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
+        initSwitcher();
+
+
 
         setCurrentGesture(Gesture.values()[gestureCode]);
 
@@ -80,6 +86,8 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         practiceGestureSwitcher.setImageResource(0);
         practiceGestureSwitcher.setImageResource(R.mipmap.check_mark_transparent);
         count++;
+        modifyScore();
+
 
         //TimeUnit.SECONDS.sleep(5); FIXME - If you still want this, thne you need to put it in an AsyncTask
 
@@ -87,9 +95,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
         practiceGestureSwitcher.setImageResource(gestureID);
 
         if (count == 3) {
-            Intent intent = new Intent(PracticeGestureActivity.this, PracticeMenuActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
+            finish();
         }
     }
 
@@ -97,6 +103,7 @@ public class PracticeGestureActivity extends GestureCompatActivity{
     {
         practiceGestureSwitcher.setImageResource(gestureID);
         count = 0;
+        modifyScore();
         //TODO - "X", with n/3 successes reset
     }
 
@@ -106,6 +113,10 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
     protected void startInstance() {
 
+    }
+
+    private void modifyScore() {
+        gestureScore.setText(Integer.toString(count)+"/3");
     }
 
     private void initSwitcher() {
