@@ -82,7 +82,6 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
     protected void gestureMatch(Gesture gesture)
     {
-        //TODO - Checkmark, with n/3 successes show
         practiceGestureSwitcher.setImageResource(0);
         practiceGestureSwitcher.setImageResource(R.mipmap.check_mark_transparent);
         count++;
@@ -101,9 +100,13 @@ public class PracticeGestureActivity extends GestureCompatActivity{
 
     protected void gestureMismatch(Gesture gesture)
     {
-        practiceGestureSwitcher.setImageResource(gestureID);
+        practiceGestureSwitcher.setImageResource(0);
+        practiceGestureSwitcher.setImageResource(R.mipmap.x_mark_transparent);
         count = 0;
         modifyScore();
+
+        practiceGestureSwitcher = (ImageSwitcher) findViewById(R.id.practice_gesture_switcher);
+        practiceGestureSwitcher.setImageResource(gestureID);
         //TODO - "X", with n/3 successes reset
     }
 
